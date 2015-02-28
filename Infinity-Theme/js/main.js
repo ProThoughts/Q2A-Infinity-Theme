@@ -1,0 +1,308 @@
+$(document).ready(function(){
+	var qlist = $('.qa-q-list');
+	var layoutdefault = getCookie('layoutdefault');
+	var layout = getCookie('layout');
+	if(! layout)
+		layout = layoutdefault;
+	//alert(layout);
+	// get cookies
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+		}
+		return "";
+	}
+
+	// Isotope or page list for question lists
+	if(layout == 'list')
+		layout_list();
+	else
+		qlist.isotope({
+			itemSelector: '.qa-q-list-item',
+			layoutMode: 'fitRows',
+			resizable: false,
+			// layout mode options
+		});
+
+	$(".infinite-ajax-load-more").click(function (e) {
+		qa_show_waiting_after(document.getElementById('infinite-ajax-load-more'), true);
+		$.ajax({
+			url: tp_ajax_infinite_page_url,
+			data: { page: tp_ajax_infinite_page_number, location: "Boston" },
+			type: "POST"
+		}).done(function(data) {
+			$('#ajax-holder').html( data );
+			if($('#ajax-holder > .qa-q-list > div').length < tp_ajax_infinite_page_items_count){
+				$('#infinite-ajax-load-more').html('There is nothing more here!');
+			}else{
+				$('#ajax-holder > .qa-q-list > div').each(function( index ) {
+					id = $(this).attr('id');
+					if(!( $('.qa-part-q-list > form > .qa-q-list #' + id ).length )){
+							
+							var elem = $('#ajax-holder > .qa-q-list  #'+id);
+							qlist.append( elem );
+							qlist.isotope( 'appended', elem ).fadeIn();
+					}
+				});
+				qa_hide_waiting(document.getElementById('infinite-ajax-load-more'));
+				tp_ajax_infinite_page_number+=1;
+				if(layout == 'list')
+					layout_list();
+				else
+					qlist.isotope({
+						itemSelector: '.qa-q-list-item',
+						layoutMode: 'masonry',
+						// layout mode options
+					});
+
+			}
+		});
+		e.preventDefault();
+	});
+	
+	// layout
+	$('#list-layout-btn').on('click', function(event) {
+		layout_list();
+		layout = 'list';
+		document.cookie="layout=list";
+	});
+	$('#masonry-layout-btn').on('click', function(event) {
+		layout_masonry();
+		layout = 'masonry';
+		document.cookie="layout=masonry";
+	});
+	
+	// change layout style to list instead of masonry
+	function layout_list() {
+		$( '.qa-q-list-item' ).each(function( index ) {
+			if ($(this).hasClass('col-md-4')) {
+				$(this).removeClass( "col-md-4" );
+				$(this).addClass( "col-md-12 q-layout-list" );
+				var featured_image = $(this).find( ".featured-image-item" );
+				if( $(featured_image).length ){
+					$(featured_image).removeClass( "featured-image-item" );
+					$(featured_image).addClass( "featured-image-item-list col-md-6" );
+				}
+			}
+		});
+		qlist.isotope();
+	}
+	$(window).resize(function () {
+		if(layout == 'list')
+			layout_list();
+	});
+	// change layout style to masonry instead of list
+	function layout_masonry() {
+		$( '.qa-q-list-item' ).each(function( index ) {
+			if ($(this).hasClass('col-md-12')) {
+				$(this).removeClass( "col-md-12 q-layout-list" );
+				$(this).addClass( "col-md-4" );
+				var featured_image = $(this).find( ".featured-image-item-list" );
+				if( $(featured_image).length ){
+					$(featured_image).removeClass( "featured-image-item-list col-md-6" );
+					$(featured_image).addClass( "featured-image-item" );
+				}
+			}
+		});
+		qlist.isotope();
+	}
+	// share links in question list
+	$(".share-item-list").click(function () {
+		//show share link
+		elem = $(this).parents('.qa-q-item-main');
+		$(elem).find(".share-container").fadeIn(500);
+		$( elem ).find(".share-list-buttons li a").each(function( index ) {
+			$( this ).on('click', function(e){
+				url = $( this ).attr('href');
+				w = 580;
+				h = 470;
+				// Fixes dual-screen position                         Most browsers      Firefox
+				var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+				var dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+
+				var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+				var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+				var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+				var top = ((height / 3) - (h / 3)) + dualScreenTop;
+
+				var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+				// Puts focus on the newWindow
+				if (window.focus) {
+					newWindow.focus();
+				}
+				e.preventDefault();
+			});
+		});
+	});
+	// close share buttons list in question lists
+	$(".qa-q-item-main").delegate(".share-close", "click", function() {
+		$(this).parent().hide();
+	});
+	// back to top
+	if ( ($(window).height() + 100) < $(document).height() ) {
+		$('#top-link-block').removeClass('hidden').affix({
+			// how far to scroll down before link "slides" into view
+			offset: {top:100}
+		});
+	}
+	// Remove Search if user Resets Form or hits Escape!
+	$('body, .main-navbar form[role="search"] button[type="reset"]').on('click keyup', function(event) {
+		if (event.which == 27 && $('.main-navbar form[role="search"]').hasClass('active') ||
+			$(event.currentTarget).attr('type') == 'reset') {
+			closeSearch();
+		}
+	});
+
+
+	// header search bar
+	function closeSearch() {
+        var $form = $('.main-navbar form[role="search"].active')
+    	$form.find('input').val('');
+		$form.removeClass('active');
+	}
+
+	// Show Search if form is not active // event.preventDefault() is important, this prevents the form from submitting
+	$(document).on('click', '.main-navbar form[role="search"]:not(.active) button[type="submit"]', function(event) {
+		event.preventDefault();
+		var $form = $(this).closest('form'),
+			$input = $form.find('input');
+		$form.addClass('active');
+		$input.focus();
+	});
+});
+// When page load is finished
+
+$(window).bind("load", function() {
+	/*
+	// share count
+	var share_btn = [];
+	var fb = [];
+	var tw = [];
+	var gp = [];
+	var pt = [];
+	var links = [];
+	$( '.qa-q-item-main' ).each(function( index ) {
+		// create share links
+		share_btn[index] = $(this).find(".share-item-list");
+		link = $(share_btn[index]).attr( "data-share-link" );
+		title = $(share_btn[index]).attr( "data-share-title" );
+		if(!($(this).find(".share-container").length))
+			$(this).append(
+			'<div class="share-container" style="display:none;">'+
+			'<button class="close share-close" type="button"><span aria-hidden="true">×</span></button>'+
+			'<ul class="share-list-buttons">'+
+			'<li><a class="btn-share btn-facebook" href="https://www.facebook.com/sharer/sharer.php?u=' + link + '"><i class="fa  fa-facebook"></i><span class="share-site-title">FaceBook</span></a></li>'+
+			'<li><a class="btn-share btn-twitter" href="http://twitter.com/home?status=' + title + ' ' + link + '"><i class="fa fa-twitter"></i><span class="share-site-title">Twitter</span></a></li>'+
+			'<li><a class="btn-share btn-google-plus" href="https://plus.google.com/share?url=' + title + ' ' + link + '"><i class="fa fa-google-plus"></i><span class="share-site-title">Google+</span></a></li>'+
+			'<li><a class="btn-share btn-pinterest" href="http://pinterest.com/pin/create/button/?url=' + link + '&description=' + title + '"><i class="fa fa-pinterest"></i><span class="share-site-title">Pinterest</span></a></li>'+
+			'</ul></div>'
+			);
+		fb[index] = $( this ).find(".btn-facebook");
+		tw[index] = $( this ).find(".btn-twitter");
+		gp[index] = $( this ).find(".btn-google-plus");
+		pt[index] = $( this ).find(".btn-pinterest");
+		
+		//link = 'http://google.com';
+		links[index] = link;
+
+		$.getJSON('http://api.sharedcount.com/?url=' + link,function (data) {
+			$( fb[index] ).append('<span class="share-count">' + data.Facebook.share_count + '</span>');
+			$( tw[index] ).append('<span class="share-count">' +  data.Twitter + '</span>');
+			$( gp[index] ).append('<span class="share-count">' +  data.GooglePlusOne + '</span>');
+			$( pt[index] ).append('<span class="share-count">' +  data.Pinterest + '</span>');
+			share_btn[index].text(data.StumbleUpon+data.Facebook.total_count+data.Delicious+ data.GooglePlusOne+data.Buzz+data.Twitter+data.Diggs+data.Pinterest+data.LinkedIn);
+		});
+
+	});
+	
+	// get twitter share count
+	$.getJSON('http://cdn.api.twitter.com/1/urls/count.json?url=' + link + '&callback=?', function (twitdata) {
+		// $('#twitter-count').text( ReplaceNumberWithCommas(twitdata.count))
+		tw[index].append('<span class="share-count">' +  twitdata.count + '</span>');
+	});
+		
+	
+	// facebook share count for all pages
+	all_links = links.join(',');
+	$.getJSON('http://graph.facebook.com/?ids=' + all_links, function (fbdata) {
+		$( '.qa-q-item-main' ).each(function( index ) {
+			share_btn[index] = $(this).find(".share-item-list");
+			link = $(share_btn[index]).attr( "data-share-link" );
+			
+			fb[index] = $( this ).find(".btn-facebook");			
+			if( fbdata[link] == 'undefined' ){
+				$( fb[index] ).append('<span class="share-count">' + fbdata[link].shares + '</span>');
+			}else{
+				$( fb[index] ).append('<span class="share-count">0</span>');
+			}
+		});
+	});
+
+	*/
+	
+});
+
+// override qa_reveal to show error boxes
+qa_reveal = function(elem, type, callback){
+	if(!($(elem).find(".close").length))
+		elem.innerHTML = elem.innerHTML + '<button class="close" data-dismiss="alert" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
+  	if (elem)
+		$(elem).fadeIn(400,'swing', callback);
+};
+// override qa_favorite_click for favorite list buttons
+qa_favorite_click = function(elem){
+	var ens=elem.name.split('_');
+	if(ens[0]=="favorite-login"){
+		// show error message for user who is not logged in
+		var mess=document.getElementById('errorbox');
+		var anchor=ens[1];
+		if (!mess) {
+			var mess=document.createElement('div');
+			mess.id='errorbox';
+			mess.className='qa-error';
+			mess.innerHTML='Please Register or log in to favorite a post!';
+			mess.style.display='none';
+		}
+		var postelem=document.getElementById(anchor);
+		var e=postelem.parentNode.insertBefore(mess, postelem);
+		qa_reveal(mess);
+	}else{
+		// favorite post
+		var postid = ens[2];
+		var code=$('#fav_code_'+postid).val();
+		var count = $(elem).text();
+		
+		qa_ajax_post('favorite', {entitytype:ens[1], entityid:ens[2], favorite:parseInt(ens[3]), code:code},
+			function (lines) {
+				if (lines[0]=='1'){
+					//$('.qa-favoriting-'+postid).hide();
+					var container = $('.qa-favoriting-'+postid);
+					//qa_set_inner_html($(elem).parent(), 'favoriting', lines.slice(1).join("\n"));
+					$('.qa-favoriting-'+postid).html(lines.slice(1).join("\n"));
+					if(ens[3]==0){
+						count = parseInt(count) - 1;
+						$('.qa-favoriting-'+postid).find('.qa-favorite').html(count);
+					}else{
+						count = parseInt(count) + 1;
+						$('.qa-favoriting-'+postid).find('.qa-unfavorite').html(count);
+					}
+					//$(elem).hide();
+				}else if (lines[0]=='0') {
+					alert(lines[1]);
+					qa_hide_waiting(elem);
+				} else
+					qa_ajax_error();
+			}
+		);
+		
+		qa_show_waiting_after(elem, false);
+	}
+	return false;
+}
+
