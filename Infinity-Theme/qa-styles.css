@@ -1558,6 +1558,48 @@ font-size:14px;
 vertical-align:middle;
 margin:4px 4px 8px 0;
 }
+/* Question list - normal question list */
+.qlist-normal .qa-part-q-list {
+    background: none repeat scroll 0 0 #fff;
+}
+.qlist-normal .qa-q-item-main {
+    border: medium none;
+	box-shadow: none;
+    display: inline-block;
+    float: left;
+}
+.qlist-normal .qa-q-item-title a {
+    padding: 0 2px;
+    width: auto;
+}
+.qlist-normal .qa-q-item-stats {
+    width: auto;
+}
+.qlist-normal .qa-voting {
+    width: auto;
+}
+.qlist-normal .qa-q-item-title {
+    border: medium none;
+}
+.qlist-normal .qa-q-item-title a h2{
+	margin: 5px 0 0 20px;
+}
+.qlist-normal .qa-a-count {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    float: left;
+    height: 65px;
+    margin: 0 5px;
+    padding: 14px 0;
+    width: 80px;
+}
+.qlist-normal .qa-q-item-avatar {
+    padding: 5px 0 0 20px;
+}
+.qlist-normal .qa-q-item-avatar-meta {
+    float: left;
+	margin: 0;
+}
 /* Question list */
 .qa-q-list{
 }
@@ -2286,9 +2328,6 @@ padding:10px;
 }
 .qa-cat-parent-favorited {
 	background-image:url(images/favorite-light-icon-15x15.png); background-repeat: no-repeat;
-}
-.qa-q-favorited .qa-q-item-title a, .qa-nav-cat-favorited, .qa-browse-cat-favorited {
-	background-position: left center; padding-left:18px;
 }
 .qa-nav-cat-favorited {
 	margin-left:-18px;

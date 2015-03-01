@@ -20,7 +20,7 @@ $(document).ready(function(){
 	// Isotope or page list for question lists
 	if(layout == 'list')
 		layout_list();
-	else
+	else if(layout == 'masonry')
 		qlist.isotope({
 			itemSelector: '.qa-q-list-item',
 			layoutMode: 'fitRows',
@@ -45,14 +45,15 @@ $(document).ready(function(){
 							
 							var elem = $('#ajax-holder > .qa-q-list  #'+id);
 							qlist.append( elem );
-							qlist.isotope( 'appended', elem ).fadeIn();
+							if(layout != 'qlist')
+								qlist.isotope( 'appended', elem ).fadeIn();
 					}
 				});
 				qa_hide_waiting(document.getElementById('infinite-ajax-load-more'));
 				tp_ajax_infinite_page_number+=1;
 				if(layout == 'list')
 					layout_list();
-				else
+				else if(layout == 'masonry')
 					qlist.isotope({
 						itemSelector: '.qa-q-list-item',
 						layoutMode: 'masonry',

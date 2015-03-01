@@ -198,7 +198,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/	
 		function main_parts($content)
 		{
-			$this->output('<article class="qa-q-content-article">');
+			$this->output('<article class="qa-q-content-article' . (qa_opt('tp_layout_lists')?' qlist-normal':'') . '">');
 			qa_html_theme_base::main_parts($content);
 			$this->output('</article>');
 		}	
@@ -554,6 +554,10 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function q_list($q_list)
 		{
+			if(qa_opt('tp_layout_lists') == 'qlist'){
+				qa_html_theme_base::q_list($q_list);
+				return;
+			}
 			if (count(@$q_list['qs'])) { // first check it is not an empty list and the feature is turned on
 			//	Collect the question ids of all items in the question list (so we can do this in one DB query)
 				$postids=array();
@@ -672,6 +676,10 @@ class qa_html_theme extends qa_html_theme_base
 	*/	
 		function q_list_items($q_items)
 		{
+			if(qa_opt('tp_layout_lists') == 'qlist'){
+				qa_html_theme_base::q_list_items($q_items);
+				return;
+			}
 			foreach ($q_items as $key => $q_item)
 				$q_items[$key]['classes'] .= ' col col-md-4';
 			qa_html_theme_base::q_list_items($q_items);
@@ -715,16 +723,8 @@ class qa_html_theme extends qa_html_theme_base
 				qa_html_theme_base::q_view_buttons($q_view);
 
 		}
-	/*
-	* q_item_stats
-	* remove Stats: votes , answer count, ...
-	*
-	* @since 1.0.0
-	* @compatible no
-	*/		
-		function q_item_stats($q_item)
-		{
-		}
+
+	
 	/*
 	* title
 	* add link to question title
@@ -794,8 +794,11 @@ class qa_html_theme extends qa_html_theme_base
 	* @related: post_tags
 	*/
 		function post_avatar_meta($post, $class, $avatarprefix=null, $metaprefix=null, $metaseparator='<br/>')
-		{	
-			
+		{
+			if(qa_opt('tp_layout_lists') == 'qlist'){
+				qa_html_theme_base::post_avatar_meta($post, $class, $avatarprefix, $metaprefix, $metaseparator);
+				return;
+			}
 			// check if it's a question list or question item	
 			if ($class != 'qa-q-item')//if (!( ($this->template=='qa') or ($this->template=='questions') ))
 				qa_html_theme_base::post_avatar_meta($post, $class, $avatarprefix, $metaprefix, $metaseparator);
@@ -811,6 +814,10 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function post_avatar($post, $class, $prefix=null)
 		{
+			if(qa_opt('tp_layout_lists') == 'qlist'){
+				qa_html_theme_base::post_avatar($post, $class, $prefix=null);
+				return;
+			}
 			// check if it's a question list or question item
 			if ($class != 'qa-q-item')//if (!( ($this->template=='qa') or ($this->template=='questions') ))
 				qa_html_theme_base::post_avatar($post, $class, $prefix);
