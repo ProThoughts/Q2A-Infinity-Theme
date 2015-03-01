@@ -198,7 +198,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/	
 		function main_parts($content)
 		{
-			$this->output('<article class="qa-q-content-article' . (qa_opt('tp_layout_lists')?' qlist-normal':'') . '">');
+			$this->output('<article class="qa-q-content-article' . (qa_opt('tp_layout_lists')=='qlist'?' qlist-defaul':'') . '">');
 			qa_html_theme_base::main_parts($content);
 			$this->output('</article>');
 		}	
@@ -275,7 +275,7 @@ class qa_html_theme extends qa_html_theme_base
 				$this->output('<ul class="qa-nav-main-list nav navbar-nav navbar-right ">');
 
 				$page_order = '';
-				if(($this->template=='qa') or ($this->template=='questions'))
+				if( (($this->template=='qa') or ($this->template=='questions')) && ((qa_opt('tp_layout_masonry_list')!='qlist') && qa_opt('tp_layout_choose')) )
 					$page_order = '
 						<li class="divider"></li>
 						<li role="presentation" class="dropdown-header">List Layout</li>
@@ -766,6 +766,16 @@ class qa_html_theme extends qa_html_theme_base
 				$this->form_hidden_elements(@$favorite['form_hidden']);
 				$this->output('</form>');
 			}
+		}
+	/*
+	* q_item_stats
+	* remove Stats: votes , answer count, ...
+	*
+	* @since 1.0.0
+	* @compatible no
+	*/		
+		function q_item_stats($q_item)
+		{
 		}
 	/*
 	* post_tags

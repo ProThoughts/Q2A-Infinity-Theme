@@ -1559,32 +1559,32 @@ vertical-align:middle;
 margin:4px 4px 8px 0;
 }
 /* Question list - normal question list */
-.qlist-normal .qa-part-q-list {
+.qlist-defaul .qa-part-q-list {
     background: none repeat scroll 0 0 #fff;
 }
-.qlist-normal .qa-q-item-main {
+.qlist-defaul .qa-q-item-main {
     border: medium none;
 	box-shadow: none;
     display: inline-block;
     float: left;
 }
-.qlist-normal .qa-q-item-title a {
+.qlist-defaul .qa-q-item-title a {
     padding: 0 2px;
     width: auto;
 }
-.qlist-normal .qa-q-item-stats {
+.qlist-defaul .qa-q-item-stats {
     width: auto;
 }
-.qlist-normal .qa-voting {
+.qlist-defaul .qa-voting {
     width: auto;
 }
-.qlist-normal .qa-q-item-title {
+.qlist-defaul .qa-q-item-title {
     border: medium none;
 }
-.qlist-normal .qa-q-item-title a h2{
+.qlist-defaul .qa-q-item-title a h2{
 	margin: 5px 0 0 20px;
 }
-.qlist-normal .qa-a-count {
+.qlist-defaul .qa-a-count {
     border: 1px solid #ddd;
     border-radius: 5px;
     float: left;
@@ -1593,10 +1593,10 @@ margin:4px 4px 8px 0;
     padding: 14px 0;
     width: 80px;
 }
-.qlist-normal .qa-q-item-avatar {
+.qlist-defaul .qa-q-item-avatar {
     padding: 5px 0 0 20px;
 }
-.qlist-normal .qa-q-item-avatar-meta {
+.qlist-defaul .qa-q-item-avatar-meta {
     float: left;
 	margin: 0;
 }
