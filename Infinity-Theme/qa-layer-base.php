@@ -69,7 +69,13 @@ class qa_html_theme extends qa_html_theme_base
 			// prepare CSS
 			$this->output("<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>");
 			$this->output("<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>");
+			
 			$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl .'css/bootstrap.min.css"/>');
+			if(qa_opt('it_custom_style_created'))
+				$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl.'css/dynamic.css"/>');
+			else
+				$this->output('<style type="text/css">' . qa_opt('it_custom_css') . '</style>');
+				
 			if (($this->template=='submit') or (substr(qa_get_state(),0,4)=='edit')){
 				$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl .'css/ask.css"/>');
 			}
@@ -77,7 +83,15 @@ class qa_html_theme extends qa_html_theme_base
 				$this->output('<link rel="stylesheet" type="text/css" href="' . $this->rooturl . 'css/admin.css"/>');
 				$this->output('<link rel="stylesheet" type="text/css" href="' . $this->rooturl . 'css/spectrum.css"/>'); // color picker
 			}
-			
+
+			$googlefonts = json_decode(qa_opt('it_typo_googlefonts'), true);
+			if (isset($googlefonts) && !empty($googlefonts))
+				foreach ($googlefonts as $font_name) {
+					$font_name = str_replace(" ", "+", $font_name);
+					$link      = 'http://fonts.googleapis.com/css?family=' . $font_name;
+					$this->output('<link href="' . $link . '" rel="stylesheet" type="text/css">');
+				}
+
 			$fav = qa_opt('it_favicon_url');
 			if( $fav )
 				$this->output('<link rel="shortcut icon" href="' .  $fav . '" type="image/x-icon">');
@@ -287,10 +301,10 @@ class qa_html_theme extends qa_html_theme_base
 					';
 					
 				$this->output('
-					<li class="dropdown qa-nav-main-single-item qa-nav-main-single-submit">
+					<li class="dropdown qa-nav-main-single-item qa-nav-main-single-submit qa-nav-main-single-ask">
 						<a class="qa-submit-item dropdown-toggle" data-toggle="dropdown" href="' . $questions_nav['url'] .'">Browse</span></a>
 
-							<ul class="dropdown-menu with-arrow" role="menu">
+							<ul class="dropdown-menu with-arrow sub-nav-brows" role="menu">
 								<li><a href="' . qa_path_html('questions') . '">' . qa_lang('main/nav_most_votes') . '</a></li>
 								<li><a href="' . qa_path_html('questions', array('sort' => 'hot')) . '">' . qa_lang_html('main/nav_hot') . '</a></li>
 								<li><a href="' . qa_path_html('questions', array('sort' => 'votes')) . '">Most Voted</a></li>
@@ -299,7 +313,7 @@ class qa_html_theme extends qa_html_theme_base
 								' . $page_order . '
 							</ul>
 					</li>
-					<li class="qa-nav-main-single-item qa-nav-main-single-submit">
+					<li class="qa-nav-main-single-item qa-nav-main-single-submit qa-nav-main-single-ask">
 						<a class="qa-submit-item" href="' . $submit_nav['url'] .'">Submit</a>
 					</li>
 				');
@@ -356,7 +370,7 @@ class qa_html_theme extends qa_html_theme_base
 					$register=@$this->content['navigation']['user']['register'];
 					if (isset($login) && !QA_FINAL_EXTERNAL_USERS) {
 						$this->output('
-							<li class="qa-nav-main-single-item qa-nav-main-single-submit dropdown">
+							<li class="qa-nav-main-single-item qa-nav-main-single-submit qa-nav-main-single-ask dropdown">
 								<a class="dropdown-toggle qa-submit-item" data-toggle="dropdown" href="' . $login['url'] .'">Login</a>
 								<ul class="user-nav dropdown-menu with-arrow">
 						');
@@ -1062,6 +1076,23 @@ class qa_html_theme extends qa_html_theme_base
 				</a>
 			</span>
 			', '');
+		}
+	/*
+	* footer
+	* HTML5 Footer
+	*
+	* @since 1.1.0
+	* @compatible yes
+	*/
+		public function attribution()
+		{
+			// Hi there. I'd really appreciate you displaying this link on your Q2A site. Thank you - Gideon
+			$this->output(
+				'<div class="qa-attribution">',
+				', Designed by <a href="http://qa-themes.com/" title="Question2Answer Themes">Q2A Themes</a>',
+				'</div>'
+			);
+			qa_html_theme_base::attribution();
 		}
 }
 	

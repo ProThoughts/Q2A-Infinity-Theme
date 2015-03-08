@@ -63,6 +63,9 @@ class it_options {
             );
 
 		$output = '';
+		if ( (qa_clicked('it_reset_button')) ){
+			it_reset_theme_options();
+		}
 		if ( (qa_clicked('it_save_button')) && ($this->added==false) ){
                 // General
                 qa_opt('logo_url', qa_post_text('it_logo_field'));
@@ -75,9 +78,10 @@ class it_options {
 				qa_opt('it_excerpt_pos_ask', (int)qa_post_text('it_excerpt_pos_ask') );
 				qa_opt('it_excerpt_pos_edit', (int)qa_post_text('it_excerpt_pos_edit') );
                 qa_opt('it_cat_advanced_enable', (int)qa_post_text('it_cat_advanced_enable'));
+				if(qa_post_text('it_cat_advanced_enable'))
+					qa_opt('allow_no_category', true);
 				qa_opt('it_cat_pos_ask', (int)qa_post_text('it_cat_pos_ask') );
 				qa_opt('it_cat_pos_edit', (int)qa_post_text('it_cat_pos_edit') );
-                qa_opt('it_cat_create_enable', (int)qa_post_text('it_cat_create_enable'));
 				qa_opt('it_feature_img_enable', (int)qa_post_text('it_feature_img_enable') );
 				qa_opt('it_featured_url_abs', qa_post_text('it_featured_url_abs') );
 
@@ -87,6 +91,7 @@ class it_options {
                 qa_opt('it_enable_except', (bool) qa_post_text('it_enable_except'));
                 qa_opt('it_except_len', (int) qa_post_text('it_except_len'));
                 qa_opt('tp_layout_lists', qa_post_text('tp_layout_lists'));
+                qa_opt('tp_layout_choose', (bool)qa_post_text('tp_layout_choose'));
                 
                 // Styling
                 qa_opt('it_bg_select', qa_post_text('it_bg_select'));
@@ -121,40 +126,8 @@ class it_options {
 						qa_opt('typo_options_backup_' . $k, '');
 					}
                 }
-                qa_opt('typo_googlefonts', json_encode($google_fonts));
+                qa_opt('it_typo_googlefonts', json_encode($google_fonts));
                 
-                // Advertisement
-                $AdsCount = (int) qa_post_text('adv_number'); // number of advertisement items
-                $ads      = array();
-                $i        = 0;
-                while (($AdsCount > 0) and ($i < 100)) { // don't create an infinite loop
-                    if (null !== qa_post_text('adv_adsense_' . $i)) {
-                        // add adsense ads
-                        $ads[$i]['adv_adsense']  = qa_post_text('adv_adsense_' . $i);
-                        $ads[$i]['adv_location'] = qa_post_text('adv_location_' . $i);
-                        $AdsCount--;
-                    } elseif ((@getimagesize(@$_FILES['it_adv_image_' . $i]['tmp_name']) > 0) or (null !== qa_post_text('adv_image_title_' . $i)) or (null !== qa_post_text('adv_image_link_' . $i)) or (null !== qa_post_text('adv_location_' . $i))) {
-                        // add static ads
-                        if (null !== qa_post_text('adv_image_url_' . $i)) {
-                            $ads[$i]['adv_image'] = qa_post_text('adv_image_url_' . $i);
-                        }
-                        $ads[$i]['adv_image_title'] = qa_post_text('adv_image_title_' . $i);
-                        $ads[$i]['adv_image_link']  = qa_post_text('adv_image_link_' . $i);
-                        $ads[$i]['adv_location']    = qa_post_text('adv_location_' . $i);
-                        $AdsCount--;
-                    }
-                    $i++;
-                }
-                qa_opt('it_advs', json_encode($ads));
-                qa_opt('it_enable_adv_list', (bool) qa_post_text('it_enable_adv_list'));
-                qa_opt('it_ads_below_question_title', base64_encode($_REQUEST['it_ads_below_question_title']));
-                qa_opt('it_ads_after_question_content', base64_encode($_REQUEST['it_ads_after_question_content']));
-                
-                // footer							
-                qa_opt('it_footer_copyright', qa_post_text('it_footer_copyright'));
-
-				
-				
 				$output .= '<div class="qa-form-tall-ok">User was successfully added.</div>';
 				$this->added = true;
 		}else{
@@ -176,118 +149,14 @@ class it_options {
 			}
 			$excerpt_access_select = '<select id="it_" name="it_excerpt_access_level" class="qa-form-wide-select">' . $list_options . '</select>';
 			 
-            // Load Advertisements
-            $advs        = json_decode(qa_opt('it_advs'), true);
-            $i           = 0;
-            $adv_content = '';
-            if (isset($advs))
-                foreach ($advs as $k => $adv) {
-                    if (true) { // use list to choose location of advertisement
-                        $list_options = '';
-                        for ($count = 1; $count <= qa_opt('page_size_qs'); $count++) {
-                            $list_options .= '<option value="' . $count . '"' . (($count == @$adv['adv_location']) ? ' selected' : '') . '>' . $count . '</option>';
-                        }
-                        $adv_location = '<select id="adv_location_' . $i . '" name="adv_location_' . $i . '" class="qa-form-wide-select">' . $list_options . '</select>';
-                    } else {
-                        $adv_location = '<input id="adv_location_' . $i . '" name="adv_location_' . $i . '" class="form-control" value="" placeholder="Position of advertisements in list" />';
-                    }
-                    if (isset($adv['adv_adsense'])) {
-                        $adv_content .= '<tr id="adv_box_' . $i . '">
-			<th class="qa-form-tall-label">
-				Advertisment #' . ($i + 1) . '
-				<span class="description">Google Adsense Code</span>
-			</th>
-			<td class="qa-form-tall-data">
-				<input class="form-control" id="adv_adsense_' . $i . '" name="adv_adsense_' . $i . '" type="text" value="' . $adv['adv_adsense'] . '">
-				<span class="description">Display After this number of questions</span>
-				' . $adv_location . '
-				<button advid="' . $i . '" id="advremove" name="advremove" class="qa-form-tall-button advremove pull-right btn" type="submit">Remove This Advertisement</button></td>
-			</tr>';
-                    } else {
-                        if (!empty($adv['adv_image']))
-                            $image = '<img id="adv_preview_' . $i . '" src="' . $adv['adv_image'] . '" class="adv-preview img-thumbnail">';
-                        else
-                            $image = '<img id="adv_preview_' . $i . '" src="" class="adv-preview img-thumbnail" style="display:none;">';
-                        $adv_content .= '<tr id="adv_box_' . $i . '">
-			<th class="qa-form-tall-label">
-				Advertisement #' . ($i + 1) . '
-				<span class="description">static advertisement</span>
-			</th>
-			<td class="qa-form-tall-data">
-				<div class="clearfix"></div>
-				' . $image . '
-				<div class="clearfix"></div>
-				<div id="adv_image_uploader_' . $i . '">Upload Icon</div>
-				<input type="hidden" value="' . @$adv['social_icon_file'] . '" id="social_image_url_' . $i . '" name="social_image_url_' . $i . '">
-				
-				<span class="description">Image Title</span>
-				<input class="form-control" type="text" id="adv_image_title_' . $i . '" name="adv_image_title_' . $i . '" value="' . @$adv['adv_image_title'] . '">
-				<span class="description">Target link</span>
-				
-				<input class="form-control" id="adv_image_link_' . $i . '" name="adv_image_link_' . $i . '" type="text" value="' . @$adv['adv_image_link'] . '">
-				<span class="description">Display After this number of questions</span>
-				
-				' . $adv_location . '
-				
-				<input type="hidden" value="' . @$adv['adv_image'] . '" id="adv_image_url_' . $i . '" name="adv_image_url_' . $i . '">
-				
-				<button advid="' . $i . '" id="advremove" name="advremove" class="qa-form-tall-button advremove pull-right btn" type="submit">Remove This Advertisement</button>
-			</td>
-			</tr>';
-                    }
-                    $i++;
-                }
-            $adv_content .= '<input type="hidden" value="' . $i . '" id="adv_number" name="adv_number">';
-            $adv_content .= '<input type="hidden" value="' . qa_opt('page_size_qs') . '" id="question_list_count" name="question_list_count">';
-            // Load Advertisements
-            $i              = 0;
-            $social_content = '';
-            $social_fields  = json_decode(qa_opt('it_social_list'), true);
-            if (isset($social_fields))
-                foreach ($social_fields as $k => $social_field) {
-                    $list_options = '<option class="icon-wrench" value="1"' . ((@$social_field['social_icon'] == '1') ? ' selected' : '') . '>Upload Social Icon</option>';
-                    foreach (it_social_icons() as $icon => $name) {
-
-                        $list_options .= '<option class="' . $icon . '" value="' . $icon . '"' . (($icon == @$social_field['social_icon']) ? ' selected' : '') . '>' . $name . '</option>';
-                    }
-                    $social_icon_list = '<select id="social_icon_' . $i . '" name="social_icon_' . $i . '" class="qa-form-wide-select  social-select" sociallistid="' . $i . '">' . $list_options . '</select>';
-                    if (isset($social_field['social_link'])) {
-                        if ((!empty($social_field['social_icon_file'])) and (@$social_field['social_icon'] == '1'))
-                            $image = '<img id="social_image_preview_' . $i . '" src="' . $social_field['social_icon_file'] . '" class="social-preview img-thumbnail">';
-                        else
-                            $image = '<img id="social_image_preview_' . $i . '" src="" class="social-preview img-thumbnail" style="display:none;">';
-                        $social_content .= '<tr id="soical_box_' . $i . '">
-			<th class="qa-form-tall-label">
-				Social Link #' . ($i + 1) . '
-				<span class="description">choose Icon and link to your social profile</span>
-			</th>
-			<td class="qa-form-tall-data">
-				<span class="description">Social Profile Link</span>
-				<input class="form-control" id="social_link_' . $i . '" name="social_link_' . $i . '" type="text" value="' . $social_field['social_link'] . '">
-				<span class="description">Link Title</span>
-				<input class="form-control" id="social_title_' . $i . '" name="social_title_' . $i . '" type="text" value="' . $social_field['social_title'] . '">
-				<span class="description">Choose Social Icon</span>
-				' . $social_icon_list . '
-				<div class="social_icon_file_' . $i . '"' . ((@$social_field['social_icon'] == '1') ? '' : ' style="display:none;"') . '>
-					<span class="description">upload Social Icon</span>
-					' . $image . '
-					<div id="social_image_uploader_' . $i . '">Upload Icon</div>
-					<input type="hidden" value="' . @$social_field['social_icon_file'] . '" id="social_image_url_' . $i . '" name="social_image_url_' . $i . '">
-				</div>
-				<button id="social_remove" class="qa-form-tall-button social_remove pull-right btn" type="submit" name="social_remove" socialid="' . $i . '">Remove This Link</button>
-			</tr>';
-                    }
-                    $i++;
-                }
-            $social_content .= '<input type="hidden" value="' . $i . '" id="social_count" name="social_count">';
             // Background list
             // List of Backgrounds
-            $p_path       = $this->theme_directory . '/images/patterns';
+            $p_path       = $this->theme_directory . 'images/patterns';
             $bg_images    = array();
             $list_options = '';
             $files        = scandir($p_path, 1);
-            $list_options .= '<option class="icon-wrench" value="bg_default"' . ((qa_opt('it_bg_select') == 'bg_default') ? ' selected' : '') . '>Default Background</option>';
-            $list_options .= '<option class="icon-wrench" value="bg_color"' . ((qa_opt('it_bg_select') == 'bg_color') ? ' selected' : '') . '>only use Background Color</option>';
+            $list_options .= '<option value="bg_default"' . ((qa_opt('it_bg_select') == 'bg_default') ? ' selected' : '') . '>Default Background</option>';
+            $list_options .= '<option value="bg_color"' . ((qa_opt('it_bg_select') == 'bg_color') ? ' selected' : '') . '>only use Background Color</option>';
             //@$bg_images[qa_opt('qat_bg_image_index')
             foreach ($files as $file)
                 if (!((empty($file)) or ($file == '.') or ($file == '..'))) {
@@ -312,12 +181,6 @@ class it_options {
 			</li>
 			<li role="presentation">
 				<a href="#" data-toggle=".qa-part-form-tc-typo">Typography</a>
-			</li>
-			<li role="presentation">
-				<a href="#" data-toggle=".qa-part-form-tc-ads">Advertisements</a>
-			</li>
-			<li role="presentation">
-				<a href="#" data-toggle=".qa-part-form-tc-footer">Footer</a>
 			</li>
 		</ul>
 	</div>
@@ -407,9 +270,20 @@ class it_options {
 				</tr>
 			</tbody>
 		</table>
-		<h4>Category Field</h4>
+		<h4>Advanced Category Field</h4>
 		<table class="qa-form-tall-table options-table">
 			<tbody>
+			<div class="alert alert-danger" role="alert">
+				<span class="fa fa-exclamation" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				Limitation & Features for using Advanced Category Field:
+				<ul>
+					<li>only works with first level categories(No Sub-Categories)</li>
+					<li>User must be able to select no categories</li>
+					<li>User will be able to create categories while asking questions</li>
+					<li>Administrator will be able to add icons or detail to each category in "admin > categories" page</li>
+				</ul>
+			</div>
 				<tr>
 					<th class="qa-form-tall-label">
 						Enable Advanced Category
@@ -438,18 +312,6 @@ class it_options {
 					</th>
 					<td class="qa-form-tall-data">
 						<input id="it_cat_pos_edit" class="form-control" type="text" value="' . qa_opt('it_cat_pos_edit') . '" name="it_cat_pos_edit">
-					</td>
-				</tr>
-				<tr>
-					<th class="qa-form-tall-label">
-						Allow front-end category creation
-						<span class="description">By enabling this option all users will be able to create new categories while asking or editing a question</span>
-					</th>
-					<td class="qa-form-tall-data">
-						<div class="on-off-checkbox-container">
-							<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_cat_create_enable') ? ' checked=""' : '') . ' id="it_cat_create_enable" name="it_cat_create_enable">
-							<label for="it_cat_create_enable"></label>
-						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -538,6 +400,8 @@ class it_options {
 						</div>
 					</td>
 				</tr>
+			</tbody>
+			<tbody>
 				<tr>
 					<th class="qa-form-tall-label">
 						List Layout
@@ -547,9 +411,21 @@ class it_options {
 						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'masonry' ? ' checked=""' : '') . ' id="tp_layout_masonry" name="tp_layout_lists" value="masonry">
 						   <label for="tp_layout_masonry">Masonry Grid</label>
 						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'list' ? ' checked=""' : '') . ' id="tp_layout_masonry_list" name="tp_layout_lists" value="list">
-						   <label for="tp_layout_masonry_list">List(masonry enabled)</label> 
+						   <label for="tp_layout_masonry_list">Masonry List</label> 
 						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'qlist' ? ' checked=""' : '') . ' id="tp_layout_qlist" name="tp_layout_lists" value="qlist">
-						   <label for="tp_layout_qlist">No Masonry(Simple List)</label> 
+						   <label for="tp_layout_qlist">Default List</label> 
+					</td>
+				</tr>
+				<tr>
+					<th class="qa-form-tall-label">
+						Allow choosing layouts
+						<span class="description">If any option other than Default List is selected, new buttons will show up under <strong>Brows</strong> menu to allow user choose layout between Masonry and Lists</span>
+					</th>
+					<td class="qa-form-tall-label">
+						<div class="on-off-checkbox-container">
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('tp_layout_choose') ? ' checked=""' : '') . ' id="tp_layout_choose" name="tp_layout_choose">
+								<label for="tp_layout_choose"></label>
+						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -975,76 +851,6 @@ class it_options {
 			</tbody>
 		</table>
 	</div>
-	<div class="qa-part-form-tc-ads">
-		<h3>Advertisment in question list</h3>
-		<table class="qa-form-tall-table options-table">
-			<tbody>
-				<tr>
-					<th class="qa-form-tall-label">
-						Advertisement in Lists
-						<span class="description">Enable Advertisement in question lists</span>
-					</th>
-					<td class="qa-form-tall-label">
-						<div class="on-off-checkbox-container">
-							<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_enable_adv_list') ? ' checked=""' : '') . ' id="it_enable_adv_list" name="it_enable_adv_list">
-							<label for="it_enable_adv_list"></label>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-			<tbody id="ads_container" ' . (qa_opt('it_enable_adv_list') ? '' : ' style="display:none;"') . '>
-				<tr>
-					<th class="qa-form-tall-label">
-						Add Advertisement
-						<span class="description">Create advertisement with static or Google Adsense</span>
-					</th>
-					<td class="qa-form-tall-label text-center">
-						<button type="submit" id="add_adv" name="add_adv" class="qa-form-tall-button btn">Add Advertisement</button>
-						<button type="submit" id="add_adsense" name="add_adsense" class="qa-form-tall-button btn">Add Google Adsense</button>
-					</td>
-				</tr>
-			' . $adv_content . '
-			</tbody>
-			
-		</table>
-		<h3>Advertisement in question page</h3>
-		<table class="qa-form-tall-table options-table">
-			<tbody><tr>
-				<th class="qa-form-tall-label">
-					Under question title
-					<span class="description">Advertisement below Question Title</span>
-				</th>
-				<td class="qa-form-tall-label">
-					<textarea class="form-control" cols="40" rows="5" name="it_ads_below_question_title">' . base64_decode(qa_opt('it_ads_below_question_title')) . '</textarea>
-				</td>
-			</tr>
-			<tr>
-				<th class="qa-form-tall-label">
-					After question content
-					<span class="description">this advertisement will show up between Question & Answer</span>
-				</th>
-				<td class="qa-form-tall-label">
-					<textarea class="form-control" cols="40" rows="5" name="it_ads_after_question_content">' . base64_decode(qa_opt('it_ads_after_question_content')) . '</textarea>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="qa-part-form-tc-footer">
-	<table class="qa-form-tall-table options-table">
-		<tbody>
-			<tr>
-				<th class="qa-form-tall-label">
-					Text at right side of footer
-					<span class="description">you can add links or images by entering html code</span>
-				</th>
-				<td class="qa-form-tall-label">
-					<input id="it_footer_copyright" class="form-control" type="text" name="it_footer_copyright" value="' . qa_opt('it_footer_copyright') . '">
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	</div>	
 	<div class="form-button-sticky-footer">
 		<div class="form-button-holder">
 			<input type="submit" class="qa-form-tall-button btn-primary" title="" value="Save Changes" name="it_save_button">
