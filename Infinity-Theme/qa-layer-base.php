@@ -67,9 +67,6 @@ class qa_html_theme extends qa_html_theme_base
 		function head_css()
 		{
 			// prepare CSS
-			$this->output("<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>");
-			$this->output("<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>");
-			
 			$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl .'css/bootstrap.min.css"/>');
 			if(qa_opt('it_custom_style_created'))
 				$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl.'css/dynamic.css"/>');
