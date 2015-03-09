@@ -72,6 +72,9 @@ class it_options {
 				if(!empty(qa_post_text('it_logo_field')))
 					qa_opt('logo_show', true);
                 qa_opt('it_favicon_url', qa_post_text('it_favicon_field'));
+				qa_opt('it_infinite_scroll_home_enable', (int)qa_post_text('it_infinite_scroll_home_enable') );
+				qa_opt('it_infinite_scroll_qa_enable', (int)qa_post_text('it_infinite_scroll_qa_enable') );
+				qa_opt('it_infinite_scroll_auto_enable', (int)qa_post_text('it_infinite_scroll_auto_enable') );
 				qa_opt('it_excerpt_field_enable', (int)qa_post_text('it_excerpt_field_enable') );
 				qa_opt('it_excerpt_access_level', (int)qa_post_text('it_excerpt_access_level') );
 				qa_opt('it_excerpt_field_length', (int)qa_post_text('it_excerpt_field_length') );
@@ -208,6 +211,47 @@ class it_options {
 						' . (qa_opt('it_favicon_url') ? '<img id="favicon-preview" class="favicon-preview img-thumbnail" src="' . qa_opt('it_favicon_url') . '">' : '<img id="favicon-preview" class="favicon-preview img-thumbnail" style="display:none;" src="">') . '
 						<div id="favicon_uploader">Upload</div>
 						<input id="it_favicon_field" type="hidden" name="it_favicon_field" value="' . qa_opt('it_favicon_url') . '">
+					</td>
+				</tr>
+			</tbody>
+			<tbody>
+				<tr>
+					<th class="qa-form-tall-label">
+						Enable Infinite Scroll in Home Page 
+						<span class="description">Replaces \'Home Page\' suggestion section at the end of page with infinite scroll button</span>
+					</th>
+					<td class="qa-form-tall-data">
+						<div class="on-off-checkbox-container">
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_infinite_scroll_home_enable') ? ' checked=""' : '') . ' id="it_infinite_scroll_home_enable" name="it_infinite_scroll_home_enable">
+							<label for="it_infinite_scroll_home_enable">
+							</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th class="qa-form-tall-label">
+						Enable Infinite Scroll in question lists 
+						<span class="description">Replaces page numbers with Infinite Scroll</span>
+					</th>
+					<td class="qa-form-tall-data">
+						<div class="on-off-checkbox-container">
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_infinite_scroll_qa_enable') ? ' checked=""' : '') . ' id="it_infinite_scroll_qa_enable" name="it_infinite_scroll_qa_enable">
+							<label for="it_infinite_scroll_qa_enable">
+							</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th class="qa-form-tall-label">
+						Enable Auto load with Infinite Scroll
+						<span class="description">Post items will be loaded when user reaches end of page</span>
+					</th>
+					<td class="qa-form-tall-data">
+						<div class="on-off-checkbox-container">
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_infinite_scroll_auto_enable') ? ' checked=""' : '') . ' id="it_infinite_scroll_auto_enable" name="it_infinite_scroll_auto_enable">
+							<label for="it_infinite_scroll_auto_enable">
+							</label>
+						</div>
 					</td>
 				</tr>
 			</tbody>

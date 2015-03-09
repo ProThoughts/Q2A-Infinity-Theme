@@ -27,8 +27,8 @@ $(document).ready(function(){
 			resizable: false,
 			// layout mode options
 		});
-
-	$(".infinite-ajax-load-more").click(function (e) {
+	// Infinite Scroll
+	function InfinitScroll(){
 		qa_show_waiting_after(document.getElementById('infinite-ajax-load-more'), true);
 		$.ajax({
 			url: it_ajax_infinite_page_url,
@@ -62,9 +62,18 @@ $(document).ready(function(){
 
 			}
 		});
+	}
+	$(".infinite-ajax-load-more").click(function (e) {
+		InfinitScroll();
 		e.preventDefault();
 	});
-	
+	if(it_ajax_infinite_autoload == 1){
+	$(window).scroll(function() {
+	   if($(window).scrollTop() + $(window).height() > $(document).height() - 300) {
+		   InfinitScroll();
+	   }
+	});
+	}
 	// layout
 	$('#list-layout-btn').on('click', function(event) {
 		layout_list();

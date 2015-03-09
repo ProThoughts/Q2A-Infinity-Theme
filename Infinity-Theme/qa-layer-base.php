@@ -114,7 +114,11 @@ class qa_html_theme extends qa_html_theme_base
 			$variables .= 'it_ajax_featured_delete_url = "' . MYTHEME_URL . 'ajax_delete.php";';
 			$variables .= 'it_ajax_infinite_page_url = "' . MYTHEME_URL . 'ajax_infinite_page.php";';
 			$variables .= 'it_ajax_infinite_page_number = 2;';
-			$variables .= 'it_ajax_infinite_page_items_count = ' .qa_opt('page_size_home');
+			$variables .= 'it_ajax_infinite_page_items_count = ' .qa_opt('page_size_home') . ';';
+			if(qa_opt('it_infinite_scroll_auto_enable'))
+				$variables .= 'it_ajax_infinite_autoload = 1;';
+			else
+				$variables .= 'it_ajax_infinite_autoload = 0;';
 			$this->output('<script>' . $variables . '</script>');
 			// prepare JS scripts include Bootstrap's JS file
 			$this->output('<script src="'.$this->rooturl.'js/bootstrap.min.js" type="text/javascript"></script>');
@@ -1062,6 +1066,19 @@ class qa_html_theme extends qa_html_theme_base
 		}
 
 	/*
+	* page_links_list
+	* Related: suggest_next()
+	* don't load infinite Scroll with page numbers
+	*
+	* @since 1.1.0
+	* @compatible yes
+	*/
+		function page_links_list($page_items)
+		{
+			if(!( ($this->template=='qa' && qa_opt('it_infinite_scroll_home_enable')) || ($this->template=='questions' && qa_opt('it_infinite_scroll_qa_enable')) ))
+				qa_html_theme_base::page_links_list($page_items);
+		}
+	/*
 	* suggest_next
 	* Ajax infinite page load
 	*
@@ -1070,7 +1087,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function suggest_next()
 		{
-			if($this->template=='qa'){
+			if( ($this->template=='qa' && qa_opt('it_infinite_scroll_home_enable')) || ($this->template=='questions' && qa_opt('it_infinite_scroll_qa_enable')) ){
 				$this->output('<div id="infinite-ajax-suggest" class="qa-suggest-next infinite-ajax-suggest">');
 				$this->output('<a href="#" id="infinite-ajax-load-more"  class="infinite-ajax-load-more">Load More</a>');
 				$this->output('</div>');
