@@ -57,4 +57,6 @@ function it_reset_theme_options(){
 	}
 	qa_opt('it_typo_googlefonts', '');	
 	
+	// Q2A Customizations
+	qa_opt('avatar_q_list_size', 48); // set default avatar size in question lists to 48px
 }
