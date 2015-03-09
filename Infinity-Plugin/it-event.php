@@ -5,7 +5,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 require_once QA_INCLUDE_DIR.'qa-db-metas.php';
 
-class tp_event {
+class it_event {
 
 	function process_event ($event, $userid, $handle, $cookieid, $params) {
 		switch ($event) {

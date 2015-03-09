@@ -6,7 +6,7 @@ if (!defined('QA_VERSION')) {
 }
 
 	// Background customizations
-	$p_url = TP_URL . '/images/patterns/';
+	$p_url = it_URL . '/images/patterns/';
 	$css = '';
 	// Body
 	$bg_image = qa_opt('it_bg_select');

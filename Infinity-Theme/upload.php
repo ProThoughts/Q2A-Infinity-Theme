@@ -8,11 +8,11 @@ if(qa_get_logged_in_level()<QA_USER_LEVEL_ADMIN){
 		header('Location: /');
 		exit;
 }
-if (!defined('TP_Featured_DIR')) {
+if (!defined('IT_Featured_DIR')) {
 	if(defined('QA_BLOBS_DIRECTORY'))
-		define('TP_Featured_DIR', QA_BLOBS_DIRECTORY);
+		define('IT_Featured_DIR', QA_BLOBS_DIRECTORY);
 	else
-		define('TP_Featured_DIR', "uploads/");
+		define('IT_Featured_DIR', "uploads/");
 }
 $inc_dir = "class_images.php";
 if(isset($_FILES["featured"]))
@@ -26,7 +26,7 @@ if(isset($_FILES["featured"]))
 	{
 		require_once $inc_dir;
 			$filenames = array();
-			$uploaddir 	= TP_Featured_DIR;
+			$uploaddir 	= IT_Featured_DIR;
 			$ext = pathinfo( $_FILES['featured']['name'], PATHINFO_EXTENSION);
 			$file_name = md5(time().uniqid());
 			$temp_name = $file_name.'_temp';
@@ -66,13 +66,13 @@ if(isset($_FILES["featured"]))
 if(isset($_FILES["myfile"]["name"])) //single file
 {
 	$fileName = $_FILES["myfile"]["name"];
-	if (file_exists(TP_Featured_DIR.$fileName)) {
+	if (file_exists(IT_Featured_DIR.$fileName)) {
 		$exts = substr(strrchr($fileName,'.'),1);
 		$withoutExt = preg_replace("/\\.[^.\\s]{3,4}$/", "", $fileName);
-		for($i=2; file_exists(TP_Featured_DIR.$withoutExt.'-'.$i.'.'.$exts); $i++);
+		for($i=2; file_exists(IT_Featured_DIR.$withoutExt.'-'.$i.'.'.$exts); $i++);
 		$fileName = $withoutExt.'-'.$i.'.'.$exts;
 	}
-	move_uploaded_file($_FILES["myfile"]["tmp_name"],TP_Featured_DIR.$fileName);
+	move_uploaded_file($_FILES["myfile"]["tmp_name"],IT_Featured_DIR.$fileName);
 	echo $fileName;
 }
 

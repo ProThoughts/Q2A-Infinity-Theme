@@ -1,5 +1,5 @@
 <?php
-class tp_process 
+class it_process 
 {	
 	/**
 	 * save category meta data if category is updated 

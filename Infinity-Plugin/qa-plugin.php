@@ -17,13 +17,13 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
-define('TP_DIR', dirname( __FILE__ ));
-define('TP_URL', tp_get_base_url().'/qa-plugin/Infinity-Plugin');
-define('TP_THEME_URL', tp_get_base_url().'/qa-theme/Infinity-Theme');
-define('TP_THEME_DIR', QA_THEME_DIR . '/Infinity-Theme');
-define('TP_VERSION', 1);
+define('IT_DIR', dirname( __FILE__ ));
+define('IT_URL', it_get_base_url().'/qa-plugin/Infinity-Plugin');
+define('IT_THEME_URL', it_get_base_url().'/qa-theme/Infinity-Theme');
+define('IT_THEME_DIR', QA_THEME_DIR . '/Infinity-Theme');
+define('IT_VERSION', 1);
 
-require_once(TP_DIR. '/functions.php');
+require_once(IT_DIR. '/functions.php');
 
 // register plugin language
 qa_register_plugin_phrases('language/it-lang-*.php', 'Infinity');
@@ -34,13 +34,13 @@ qa_register_plugin_overrides('overrides.php');
 
 qa_register_plugin_layer('it-layer.php', 'Infinity Plugin Layer');
 
-qa_register_plugin_module('event', 'it-event.php', 'tp_event', 'Infinity Plugin Event');
+qa_register_plugin_module('event', 'it-event.php', 'it_event', 'Infinity Plugin Event');
 
-qa_register_plugin_module('process', 'it-process.php', 'tp_process', 'Infinity Plugin Process');
+qa_register_plugin_module('process', 'it-process.php', 'it_process', 'Infinity Plugin Process');
 
 
 
-function tp_get_base_url()
+function it_get_base_url()
 {
 	/* First we need to get the protocol the website is using */
 	$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';

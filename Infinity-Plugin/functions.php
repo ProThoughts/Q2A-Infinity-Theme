@@ -26,8 +26,8 @@ function it_reset_theme_options(){
     qa_opt('it_enble_back_to_top', false);
     qa_opt('it_enable_except', true);
     qa_opt('it_except_len', 256);
-    qa_opt('tp_layout_lists', 'masonry');
-    qa_opt('tp_layout_choose', true);
+    qa_opt('it_layout_lists', 'masonry');
+    qa_opt('it_layout_choose', true);
 
     // Styling
     qa_opt('it_bg_select', 'bg_default');

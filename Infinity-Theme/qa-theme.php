@@ -13,7 +13,7 @@
 	define('MYTHEME_URL',  qa_opt('site_url') . 'qa-theme/' . qa_get_site_theme() . '/');
 	
 	// set layout cookies
-	$layout = qa_opt('tp_layout_lists');
+	$layout = qa_opt('it_layout_lists');
 	if($layout)
 		setcookie('layoutdefault', $layout, time()+86400*3650, '/', QA_COOKIE_DOMAIN);
 	else

@@ -16,29 +16,29 @@
 	</head>
 	<body>
 <?php
-$version = qa_opt('TP_VERSION');
+$version = qa_opt('IT_VERSION');
 $suggest='<p><a href="'.qa_path_html('admin', null, null, QA_URL_FORMAT_SAFEST).'">Go to admin center</a></p>';
 // first installation
 if (empty($version)){
 	//reset_theme_options();
 	$version = 1;
-	qa_opt('TP_VERSION',$version);
+	qa_opt('IT_VERSION',$version);
 	echo '<p>Theme is installed.</p>';
 }
 /*
-if ($version < TP_VERSION){
+if ($version < IT_VERSION){
 	$version = 1.1;
-	qa_opt('tp_version',$version);
+	qa_opt('IT_VERSION',$version);
 	echo '<p>Theme is updated to version 1.1</p>';
 }
-if ($version < TP_VERSION){
+if ($version < IT_VERSION){
 	$version = 1.2;
-	qa_opt('TP_VERSION',$version);
+	qa_opt('IT_VERSION',$version);
 	echo '<p>Theme is updated to version 1.2</p>';
 }
 */
 
-if ($version==TP_VERSION){
+if ($version==IT_VERSION){
 	echo '<p>Your Theme is up to date.</p>';
 }
 echo $suggest;

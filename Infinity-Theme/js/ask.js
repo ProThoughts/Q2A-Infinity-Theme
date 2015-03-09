@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
 	if($( "#category_tag_holder" ).length){
 		var categorylist = $('#category_tag_holder').magicSuggest({
-			data: tp_ajax_category_url,
+			data: it_ajax_category_url,
 			//expandOnFocus: true,
 			//hideTrigger: true,
 			minChars: 0,
@@ -17,8 +17,8 @@ jQuery(document).ready(function(){
 					var output = '<div class="sl-category-item">';
 					if ( meta.tips_cat_icon48 !==null && meta.tips_cat_icon48 !==undefined )
 						output += '<img src="' + meta.tips_cat_icon48 + '" />';
-					else if ( tp_new_category_icon.trim() )
-						output += '<img src="' + tp_new_category_icon + '" />';
+					else if ( it_new_category_icon.trim() )
+						output += '<img src="' + it_new_category_icon + '" />';
 					if ( meta.tips_cat_desc !== null && meta.tips_cat_desc !==undefined)
 						output += '<div class="sl-category-title">' + data.title + '</div>';
 					else if ( data.title.trim() )
@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
 					output += '</div>';
 				}else{
 					var output = '<div class="sl-category-item">';
-					output += '<img src="' + tp_new_category_icon + '" />';
+					output += '<img src="' + it_new_category_icon + '" />';
 					output += '<div class="sl-category-title alone">' + data.title + '</div>';
 					output += '<div class="sl-category-description">';
 					output += '<div class="sl-category-qcount alone">' + data.qcount + ' Tips</div>';
@@ -69,7 +69,7 @@ jQuery(document).ready(function(){
 	}
 	// Upload Featured file
 	$("#featured_file_upload").uploadFile({
-		url:tp_ajax_featured_upload_url,
+		url:it_ajax_featured_upload_url,
 		allowedTypes:"png,gif,jpg,jpeg",
 		fileName:"myfile",
 		maxFileSize:1024*1000,
@@ -99,7 +99,7 @@ jQuery(document).ready(function(){
 		/*
 		// now it uses event to remove file
 		$.ajax({
-			url: tp_ajax_featured_delete_url,
+			url: it_ajax_featured_delete_url,
 			context: $("#featured_image").val(),
 			type: 'post',
 			

@@ -106,15 +106,15 @@ class qa_html_theme extends qa_html_theme_base
 			qa_html_theme_base::head_script();
 			// set JS variables
 			$variables = '';
-			$variables .= 'tp_root_url = "' . MYTHEME_URL .'";';
+			$variables .= 'it_root_url = "' . MYTHEME_URL .'";';
 			$variables .= 'it_featured_url_abs = "' . qa_opt('it_featured_url_abs') .'";';
-			$variables .= 'tp_ajax_category_url = "' . MYTHEME_URL . 'ajax_category.php";';
-			$variables .= 'tp_new_category_icon = "' . qa_opt('tp_new_cat_icon') .'";';
-			$variables .= 'tp_ajax_featured_upload_url = "' . MYTHEME_URL . 'ajax_upload.php";';
-			$variables .= 'tp_ajax_featured_delete_url = "' . MYTHEME_URL . 'ajax_delete.php";';
-			$variables .= 'tp_ajax_infinite_page_url = "' . MYTHEME_URL . 'ajax_infinite_page.php";';
-			$variables .= 'tp_ajax_infinite_page_number = 2;';
-			$variables .= 'tp_ajax_infinite_page_items_count = ' .qa_opt('page_size_home');
+			$variables .= 'it_ajax_category_url = "' . MYTHEME_URL . 'ajax_category.php";';
+			$variables .= 'it_new_category_icon = "' . qa_opt('it_new_cat_icon') .'";';
+			$variables .= 'it_ajax_featured_upload_url = "' . MYTHEME_URL . 'ajax_upload.php";';
+			$variables .= 'it_ajax_featured_delete_url = "' . MYTHEME_URL . 'ajax_delete.php";';
+			$variables .= 'it_ajax_infinite_page_url = "' . MYTHEME_URL . 'ajax_infinite_page.php";';
+			$variables .= 'it_ajax_infinite_page_number = 2;';
+			$variables .= 'it_ajax_infinite_page_items_count = ' .qa_opt('page_size_home');
 			$this->output('<script>' . $variables . '</script>');
 			// prepare JS scripts include Bootstrap's JS file
 			$this->output('<script src="'.$this->rooturl.'js/bootstrap.min.js" type="text/javascript"></script>');
@@ -209,7 +209,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/	
 		function main_parts($content)
 		{
-			$this->output('<article class="qa-q-content-article' . (qa_opt('tp_layout_lists')=='qlist'?' qlist-defaul':'') . '">');
+			$this->output('<article class="qa-q-content-article' . (qa_opt('it_layout_lists')=='qlist'?' qlist-defaul':'') . '">');
 			qa_html_theme_base::main_parts($content);
 			$this->output('</article>');
 		}	
@@ -286,7 +286,7 @@ class qa_html_theme extends qa_html_theme_base
 				$this->output('<ul class="qa-nav-main-list nav navbar-nav navbar-right ">');
 
 				$page_order = '';
-				if( (($this->template=='qa') or ($this->template=='questions')) && ((qa_opt('tp_layout_masonry_list')!='qlist') && qa_opt('tp_layout_choose')) )
+				if( (($this->template=='qa') or ($this->template=='questions')) && ((qa_opt('it_layout_masonry_list')!='qlist') && qa_opt('it_layout_choose')) )
 					$page_order = '
 						<li class="divider"></li>
 						<li role="presentation" class="dropdown-header">List Layout</li>
@@ -565,7 +565,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function q_list($q_list)
 		{
-			if(qa_opt('tp_layout_lists') == 'qlist'){
+			if(qa_opt('it_layout_lists') == 'qlist'){
 				qa_html_theme_base::q_list($q_list);
 				return;
 			}
@@ -687,7 +687,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/	
 		function q_list_items($q_items)
 		{
-			if(qa_opt('tp_layout_lists') == 'qlist'){
+			if(qa_opt('it_layout_lists') == 'qlist'){
 				qa_html_theme_base::q_list_items($q_items);
 				return;
 			}
@@ -840,7 +840,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function post_avatar_meta($post, $class, $avatarprefix=null, $metaprefix=null, $metaseparator='<br/>')
 		{
-			if(qa_opt('tp_layout_lists') == 'qlist'){
+			if(qa_opt('it_layout_lists') == 'qlist'){
 				qa_html_theme_base::post_avatar_meta($post, $class, $avatarprefix, $metaprefix, $metaseparator);
 				return;
 			}
@@ -859,7 +859,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/
 		function post_avatar($post, $class, $prefix=null)
 		{
-			if(qa_opt('tp_layout_lists') == 'qlist'){
+			if(qa_opt('it_layout_lists') == 'qlist'){
 				qa_html_theme_base::post_avatar($post, $class, $prefix=null);
 				return;
 			}

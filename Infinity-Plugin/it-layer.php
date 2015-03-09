@@ -7,9 +7,9 @@ class qa_html_theme_layer extends qa_html_theme_base {
 
 		if(qa_get_logged_in_level() >= QA_USER_LEVEL_ADMIN)	{
 			// theme installation & update
-			$version = qa_opt('TP_VERSION');
-			if( TP_VERSION > $version )
-				qa_redirect('tp_installation');
+			$version = qa_opt('IT_VERSION');
+			if( IT_VERSION > $version )
+				qa_redirect('it_installation');
 			// admin/category form fields
 			if( $this->request == 'admin/categories' &&  qa_get('edit') >= 1 ) {
 				require_once QA_INCLUDE_DIR.'qa-db-metas.php';
@@ -92,13 +92,13 @@ class qa_html_theme_layer extends qa_html_theme_base {
 			// Excerpt Field
 			if(qa_opt('it_excerpt_field_enable')){
 				if ($this->template=='submit'){
-					$excertp_pos = (int)qa_opt('it_excerpt_pos_ask');
-					$excertp_text = '';
+					$excerit_pos = (int)qa_opt('it_excerpt_pos_ask');
+					$excerit_text = '';
 				}else{
 					$postid = $this->content["q_view"]["raw"]["postid"];
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
-					$excertp_pos = (int)qa_opt('it_excerpt_pos_edit');
-					$excertp_text = qa_db_postmeta_get($postid, 'et_excerpt_text');
+					$excerit_pos = (int)qa_opt('it_excerpt_pos_edit');
+					$excerit_text = qa_db_postmeta_get($postid, 'et_excerpt_text');
 				}
 			}
 				
@@ -137,15 +137,15 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				$custom_field = array();
 				$custom_field[0]['excerpt']['label'] = 'Add Excerpt';
 				$custom_field[0]['excerpt']['html'] = '
-					<textarea name="q-excerpt" id="excerpt-input-placeholder" class="qa-form-tall-text" cols="40" rows="3" name="excerpt-input-placeholder" placeholder="If you add an excerpt it will be used in lists">' . $excertp_text . '</textarea>
+					<textarea name="q-excerpt" id="excerpt-input-placeholder" class="qa-form-tall-text" cols="40" rows="3" name="excerpt-input-placeholder" placeholder="If you add an excerpt it will be used in lists">' . $excerit_text . '</textarea>
 				';
 				$custom_field[0]['excerpt']['type'] = 'custom';
 				
 				$count = count($this->content[$form_name]["fields"]);
 				$this->content[$form_name]["fields"] = array_merge(
-					array_slice($this->content[$form_name]["fields"], 0, $excertp_pos),
+					array_slice($this->content[$form_name]["fields"], 0, $excerit_pos),
 					$custom_field[0],
-					array_slice($this->content[$form_name]["fields"], $excertp_pos, $count)
+					array_slice($this->content[$form_name]["fields"], $excerit_pos, $count)
 				);
 			}
 			//v($this->content[$form_name]["fields"]);

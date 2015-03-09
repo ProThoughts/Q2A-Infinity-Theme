@@ -12,7 +12,7 @@ $(document).ready(function(){
 		});
 	// General
 	$("#logo_uploader").uploadFile({
-		url:tp_root_url + "upload.php",
+		url:it_root_url + "upload.php",
 		allowedTypes:"png,gif,jpg,jpeg",
 		fileName:"myfile",
 		maxFileCount:1,
@@ -25,7 +25,7 @@ $(document).ready(function(){
 			$("#logo-preview").show();
 		},
 		deleteCallback:function(data, pd) {
-			$.post(tp_root_url + "upload-delete.php", {op: "delete",name: data},
+			$.post(it_root_url + "upload-delete.php", {op: "delete",name: data},
 					function (resp,textStatus, jqXHR) {
 							$("#logo-preview").hide(500);
 							$("#it_logo_field").val("");
@@ -34,7 +34,7 @@ $(document).ready(function(){
 		},
 	});
 	$("#favicon_uploader").uploadFile({
-		url:tp_root_url + "upload.php",
+		url:it_root_url + "upload.php",
 		allowedTypes:"png,gif,jpg,jpeg",
 		fileName:"myfile",
 		maxFileCount:1,
@@ -189,7 +189,7 @@ $(document).ready(function(){
 	}
 	function build_advertisement_uploader(id){
 		$("#adv_image_uploader_" + id).uploadFile({
-			url:tp_root_url + "upload.php",
+			url:it_root_url + "upload.php",
 			allowedTypes:"png,gif,jpg,jpeg",
 			fileName:"myfile",
 			maxFileCount:1,
@@ -202,7 +202,7 @@ $(document).ready(function(){
 				$("#adv_preview_"+id).show();
 			},
 			deleteCallback:function(data, pd) {
-				$.post(tp_root_url + "upload-delete.php", {op: "delete",name: data},
+				$.post(it_root_url + "upload-delete.php", {op: "delete",name: data},
 						function (resp,textStatus, jqXHR) {
 								$("#adv_preview_"+id).hide(500);
 								$("#adv_image_url_"+id).val("");
@@ -261,7 +261,7 @@ $(document).ready(function(){
 	}
 	function build_social_uploader(id){
 		$("#social_image_uploader_" + id).uploadFile({
-			url:tp_root_url + "upload.php",
+			url:it_root_url + "upload.php",
 			allowedTypes:"png,gif,jpg,jpeg",
 			fileName:"myfile",
 			maxFileCount:1,
@@ -274,7 +274,7 @@ $(document).ready(function(){
 				$("#social_image_preview_"+id).show();
 			},
 			deleteCallback:function(data, pd) {
-				$.post(tp_root_url + "upload-delete.php", {op: "delete",name: data},
+				$.post(it_root_url + "upload-delete.php", {op: "delete",name: data},
 						function (resp,textStatus, jqXHR) {
 								$("#social_image_preview_"+id).hide(500);
 								$("#social_image_url_"+id).val("");

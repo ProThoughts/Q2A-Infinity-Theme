@@ -31,12 +31,12 @@ $(document).ready(function(){
 	$(".infinite-ajax-load-more").click(function (e) {
 		qa_show_waiting_after(document.getElementById('infinite-ajax-load-more'), true);
 		$.ajax({
-			url: tp_ajax_infinite_page_url,
-			data: { page: tp_ajax_infinite_page_number, location: "Boston" },
+			url: it_ajax_infinite_page_url,
+			data: { page: it_ajax_infinite_page_number, location: "Boston" },
 			type: "POST"
 		}).done(function(data) {
 			$('#ajax-holder').html( data );
-			if($('#ajax-holder > .qa-q-list > div').length < tp_ajax_infinite_page_items_count){
+			if($('#ajax-holder > .qa-q-list > div').length < it_ajax_infinite_page_items_count){
 				$('#infinite-ajax-load-more').html('There is nothing more here!');
 			}else{
 				$('#ajax-holder > .qa-q-list > div').each(function( index ) {
@@ -50,7 +50,7 @@ $(document).ready(function(){
 					}
 				});
 				qa_hide_waiting(document.getElementById('infinite-ajax-load-more'));
-				tp_ajax_infinite_page_number+=1;
+				it_ajax_infinite_page_number+=1;
 				if(layout == 'list')
 					layout_list();
 				else if(layout == 'masonry')

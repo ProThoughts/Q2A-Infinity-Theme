@@ -90,8 +90,8 @@ class it_options {
                 qa_opt('it_enble_back_to_top', (bool) qa_post_text('it_enble_back_to_top'));
                 qa_opt('it_enable_except', (bool) qa_post_text('it_enable_except'));
                 qa_opt('it_except_len', (int) qa_post_text('it_except_len'));
-                qa_opt('tp_layout_lists', qa_post_text('tp_layout_lists'));
-                qa_opt('tp_layout_choose', (bool)qa_post_text('tp_layout_choose'));
+                qa_opt('it_layout_lists', qa_post_text('it_layout_lists'));
+                qa_opt('it_layout_choose', (bool)qa_post_text('it_layout_choose'));
                 
                 // Styling
                 qa_opt('it_bg_select', qa_post_text('it_bg_select'));
@@ -408,12 +408,12 @@ class it_options {
 						<span class="description">Toggle default list layout</span>
 					</th>
 					<td class="qa-form-tall-label">
-						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'masonry' ? ' checked=""' : '') . ' id="tp_layout_masonry" name="tp_layout_lists" value="masonry">
-						   <label for="tp_layout_masonry">Masonry Grid</label>
-						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'list' ? ' checked=""' : '') . ' id="tp_layout_masonry_list" name="tp_layout_lists" value="list">
-						   <label for="tp_layout_masonry_list">Masonry List</label> 
-						<input class="theme-option-radio" type="radio"' . (qa_opt('tp_layout_lists') == 'qlist' ? ' checked=""' : '') . ' id="tp_layout_qlist" name="tp_layout_lists" value="qlist">
-						   <label for="tp_layout_qlist">Default List</label> 
+						<input class="theme-option-radio" type="radio"' . (qa_opt('it_layout_lists') == 'masonry' ? ' checked=""' : '') . ' id="it_layout_masonry" name="it_layout_lists" value="masonry">
+						   <label for="it_layout_masonry">Masonry Grid</label>
+						<input class="theme-option-radio" type="radio"' . (qa_opt('it_layout_lists') == 'list' ? ' checked=""' : '') . ' id="it_layout_masonry_list" name="it_layout_lists" value="list">
+						   <label for="it_layout_masonry_list">Masonry List</label> 
+						<input class="theme-option-radio" type="radio"' . (qa_opt('it_layout_lists') == 'qlist' ? ' checked=""' : '') . ' id="it_layout_qlist" name="it_layout_lists" value="qlist">
+						   <label for="it_layout_qlist">Default List</label> 
 					</td>
 				</tr>
 				<tr>
@@ -423,8 +423,8 @@ class it_options {
 					</th>
 					<td class="qa-form-tall-label">
 						<div class="on-off-checkbox-container">
-								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('tp_layout_choose') ? ' checked=""' : '') . ' id="tp_layout_choose" name="tp_layout_choose">
-								<label for="tp_layout_choose"></label>
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_layout_choose') ? ' checked=""' : '') . ' id="it_layout_choose" name="it_layout_choose">
+								<label for="it_layout_choose"></label>
 						</div>
 					</td>
 				</tr>

@@ -35,7 +35,7 @@
 	
 	array_splice($questions, 0,(int)$pagesize * ($page_number-1) );
 	
-	$qa_content=tp_q_list_page_content(
+	$qa_content=it_q_list_page_content(
 		$questions, // questions
 		$pagesize, // questions per page
 		0, // start offset
@@ -62,7 +62,7 @@
 	$themeclass->q_list($qa_content["q_list"]);
 	die();
 
-function tp_q_list_page_content($questions, $pagesize, $start, $count, $sometitle, $nonetitle,
+function it_q_list_page_content($questions, $pagesize, $start, $count, $sometitle, $nonetitle,
 		$navcategories, $categoryid, $categoryqcount, $categorypathprefix, $feedpathprefix, $suggest,
 		$pagelinkparams=null, $categoryparams=null, $dummy=null)
 	{
@@ -97,7 +97,7 @@ function tp_q_list_page_content($questions, $pagesize, $start, $count, $sometitl
 			$defaults=qa_post_html_defaults('Q');
 				
 			foreach ($questions as $question)
-				$qa_content['q_list']['qs'][]=qa_any_to_q_html_fields($question, $userid, tp_cookie_get(),
+				$qa_content['q_list']['qs'][]=qa_any_to_q_html_fields($question, $userid, it_cookie_get(),
 					$usershtml, null, qa_post_html_options($question, $defaults));
 
 		} else
@@ -110,7 +110,7 @@ function tp_q_list_page_content($questions, $pagesize, $start, $count, $sometitl
 			
 		return $qa_content;
 	}
-	function tp_cookie_get()
+	function it_cookie_get()
 	{
 		return isset($_COOKIE['qa_id']) ? qa_gpc_to_string($_COOKIE['qa_id']) : null;
 	}
