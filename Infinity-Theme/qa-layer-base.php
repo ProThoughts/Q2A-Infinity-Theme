@@ -720,6 +720,30 @@ class qa_html_theme extends qa_html_theme_base
 			$this->output('</div>');
 		}
 	/*
+	* a_selection
+	* customize "Select best answer" button
+	*
+	* @since 1.1.0
+	* @compatible no
+	*/
+		public function a_selection($post)
+		{
+			$this->output('<div class="qa-a-selection">');
+
+			if (isset($post['select_tags']))
+				$this->output('<button '.$post['select_tags'].' type="submit" class="btn btn-default qa-a-select"/>' . qa_lang_html('question/select_text') . '</button>');
+			elseif (isset($post['unselect_tags']))
+				$this->output('<button '.$post['unselect_tags'].' type="submit" class="btn btn-success qa-a-unselect"/>' . @$post['select_text'] . '</button>');
+			elseif ($post['selected'])
+				$this->output('<div class="qa-a-selected">&nbsp;</div>');
+
+			//if (isset($post['select_text']))
+			//	$this->output('<div class="qa-a-selected-text">'.@$post['select_text'].'</div>');
+
+			$this->output('</div>');
+		}
+	
+	/*
 	* q_view_buttons
 	* only show form buttons to logged in user
 	*
