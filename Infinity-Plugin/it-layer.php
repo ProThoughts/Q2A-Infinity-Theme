@@ -44,6 +44,12 @@ class qa_html_theme_layer extends qa_html_theme_base {
 		}
 		// ask form
 		if ( ($this->template=='submit') or (substr(qa_get_state(),0,4)=='edit')){
+			// Form template
+			if ($this->template=='submit')
+				$form_name = 'form';
+			else
+				$form_name = 'form_q_edit';
+
 			// Featured Image
 			if(qa_opt('it_feature_img_enable')){
 				$featured_image = '';
@@ -55,7 +61,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
 					$featured_image = qa_db_postmeta_get($postid, 'et_featured_image');
 					if(isset($featured_image)){
-						$featured_image_url = qa_opt('tp_featured_url') . $featured_image;
+						$featured_image_url = qa_opt('it_featured_url_abs') .'featured/'. $featured_image;
 						$featured_image_style = 'display: inline-block;';
 						$featured_file_container_style = 'display:none;';
 					}
@@ -70,13 +76,19 @@ class qa_html_theme_layer extends qa_html_theme_base {
 					<input type="hidden" value="'.$featured_image.'" name="featured_image" id="featured_image">
 				';
 				$custom_field[0]['category_featured_upload']['type'] = 'custom';
+
+				$count = count($this->content[$form_name]["fields"]);
+				$featured_pos = 1;
+				$this->content[$form_name]["fields"] = array_merge(
+					array_slice($this->content[$form_name]["fields"], 0, $featured_pos),
+					$custom_field[0],
+					array_slice($this->content[$form_name]["fields"], $featured_pos, $count)
+				);
+
+				//v($custom_field);
 			}else
-				$custom_field[0] = array();
-			// Form template
-			if ($this->template=='submit')
-				$form_name = 'form';
-			else
-				$form_name = 'form_q_edit';
+				$custom_field = array();
+
 			// Excerpt Field
 			if(qa_opt('it_excerpt_field_enable')){
 				if ($this->template=='submit'){

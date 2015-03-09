@@ -926,9 +926,9 @@ class qa_html_theme extends qa_html_theme_base
 						//<button class="btn btn-default btn-xs fa fa-heart qa-favorite" type="button" onclick="return qa_favorite_click(this);" name="favorite_Q_125_1" title="Add to my favorites">2</button>
 						$this->output('</div>');
 					}
-					// comments
-					$this->output('<div class="qa-list-comments">');
-						$this->output('<a class="btn btn-default btn-xs fa fa-comment comments-item-list" href="'. $qlink .'">' . $post['comments'] . '</a>');
+					// discussions
+					$this->output('<div class="qa-list-discussions">');
+						$this->output('<a class="btn btn-default btn-xs fa fa-comment discussions-item-list" href="'. $qlink .'">' . ($post['comments']+$post["answers_raw"]) . '</a>');
 					$this->output('</div>');
 					// Share
 					$this->output('<div class="qa-list-share">');

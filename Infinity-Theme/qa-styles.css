@@ -946,7 +946,7 @@ h1 .entry-title{
     border-color: #ccc;
 }
 /* Share button in lists */
-.qa-list-share, .qa-list-comments,.qa-favoriting {
+.qa-list-share, .qa-list-discussions,.qa-favoriting {
     float: right;
 }
 .share-container {
@@ -960,7 +960,7 @@ h1 .entry-title{
     width: 100%;
     z-index: 99999;
 }
-.share-item-list, .comments-item-list, .qa-unfavorite, .qa-favorite {
+.share-item-list, .discussions-item-list, .qa-unfavorite, .qa-favorite {
     border-radius: 3px;
     font-size: 16px;
     padding: 3px 5px !important;
@@ -1005,7 +1005,7 @@ h1 .entry-title{
     margin-left: 5px;
     padding: 2px 0;
 }
-.share-item-list:before, .comments-item-list:before,.qa-favorite:before,.qa-unfavorite:before {
+.share-item-list:before, .discussions-item-list:before,.qa-favorite:before,.qa-unfavorite:before {
     padding: 0 4px;
 }
 
@@ -1040,7 +1040,7 @@ h1 .entry-title{
     text-align: center;
     width: 22px;
 }
-.qa-list-comments {
+.qa-list-discussions {
     margin: 0 5px;
 }
 /* Answers and views count */
