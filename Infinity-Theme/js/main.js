@@ -28,40 +28,46 @@ $(document).ready(function(){
 			// layout mode options
 		});
 	// Infinite Scroll
+	var scroll_loading = false;
 	function InfinitScroll(){
 		qa_show_waiting_after(document.getElementById('infinite-ajax-load-more'), true);
-		$.ajax({
-			url: it_ajax_infinite_page_url,
-			data: { page: it_ajax_infinite_page_number, location: "Boston" },
-			type: "POST"
-		}).done(function(data) {
-			$('#ajax-holder').html( data );
-			if($('#ajax-holder > .qa-q-list > div').length < it_ajax_infinite_page_items_count){
-				$('#infinite-ajax-load-more').html('There is nothing more here!');
-			}else{
-				$('#ajax-holder > .qa-q-list > div').each(function( index ) {
-					id = $(this).attr('id');
-					if(!( $('.qa-part-q-list > form > .qa-q-list #' + id ).length )){
-							
-							var elem = $('#ajax-holder > .qa-q-list  #'+id);
-							qlist.append( elem );
-							if(layout != 'qlist')
-								qlist.isotope( 'appended', elem ).fadeIn();
-					}
-				});
-				qa_hide_waiting(document.getElementById('infinite-ajax-load-more'));
-				it_ajax_infinite_page_number+=1;
-				if(layout == 'list')
-					layout_list();
-				else if(layout == 'masonry')
-					qlist.isotope({
-						itemSelector: '.qa-q-list-item',
-						layoutMode: 'masonry',
-						// layout mode options
+		if(scroll_loading == false){
+			scroll_loading = true;
+			$.ajax({
+				url: it_ajax_infinite_page_url,
+				data: { page: it_ajax_infinite_page_number, location: "Boston" },
+				type: "POST"
+			}).done(function(data) {
+				$('#ajax-holder').html( data );
+				if($('#ajax-holder > .qa-q-list > div').length < it_ajax_infinite_page_items_count){
+					$('#infinite-ajax-load-more').html('There is nothing more here!');
+				}else{
+					$('#ajax-holder > .qa-q-list > div').each(function( index ) {
+						id = $(this).attr('id');
+						if(!( $('.qa-part-q-list > form > .qa-q-list #' + id ).length )){
+								
+								var elem = $('#ajax-holder > .qa-q-list  #'+id);
+								qlist.append( elem );
+								if(layout != 'qlist')
+									qlist.isotope( 'appended', elem ).fadeIn();
+						}
 					});
+					qa_hide_waiting(document.getElementById('infinite-ajax-load-more'));
+					Prepare_share_buttons();
+					scroll_loading = false;
+					it_ajax_infinite_page_number+=1;
+					if(layout == 'list')
+						layout_list();
+					else if(layout == 'masonry')
+						qlist.isotope({
+							itemSelector: '.qa-q-list-item',
+							layoutMode: 'masonry',
+							// layout mode options
+						});
 
-			}
-		});
+				}
+			});
+		}
 	}
 	$(".infinite-ajax-load-more").click(function (e) {
 		InfinitScroll();
@@ -121,7 +127,8 @@ $(document).ready(function(){
 		qlist.isotope();
 	}
 	// share links in question list
-	$(".share-item-list").click(function () {
+	//$(".share-item-list").click(function () {
+	$( "body" ).delegate( ".share-item-list", "click",function () {
 		//show share link
 		elem = $(this).parents('.qa-q-item-main');
 		$(elem).find(".share-container").fadeIn(500);
@@ -187,76 +194,31 @@ $(document).ready(function(){
 	});
 });
 // When page load is finished
-
-$(window).bind("load", function() {
-	/*
-	// share count
-	var share_btn = [];
-	var fb = [];
-	var tw = [];
-	var gp = [];
-	var pt = [];
-	var links = [];
-	$( '.qa-q-item-main' ).each(function( index ) {
-		// create share links
-		share_btn[index] = $(this).find(".share-item-list");
-		link = $(share_btn[index]).attr( "data-share-link" );
-		title = $(share_btn[index]).attr( "data-share-title" );
-		if(!($(this).find(".share-container").length))
-			$(this).append(
-			'<div class="share-container" style="display:none;">'+
-			'<button class="close share-close" type="button"><span aria-hidden="true">×</span></button>'+
-			'<ul class="share-list-buttons">'+
-			'<li><a class="btn-share btn-facebook" href="https://www.facebook.com/sharer/sharer.php?u=' + link + '"><i class="fa  fa-facebook"></i><span class="share-site-title">FaceBook</span></a></li>'+
-			'<li><a class="btn-share btn-twitter" href="http://twitter.com/home?status=' + title + ' ' + link + '"><i class="fa fa-twitter"></i><span class="share-site-title">Twitter</span></a></li>'+
-			'<li><a class="btn-share btn-google-plus" href="https://plus.google.com/share?url=' + title + ' ' + link + '"><i class="fa fa-google-plus"></i><span class="share-site-title">Google+</span></a></li>'+
-			'<li><a class="btn-share btn-pinterest" href="http://pinterest.com/pin/create/button/?url=' + link + '&description=' + title + '"><i class="fa fa-pinterest"></i><span class="share-site-title">Pinterest</span></a></li>'+
-			'</ul></div>'
-			);
-		fb[index] = $( this ).find(".btn-facebook");
-		tw[index] = $( this ).find(".btn-twitter");
-		gp[index] = $( this ).find(".btn-google-plus");
-		pt[index] = $( this ).find(".btn-pinterest");
-		
-		//link = 'http://google.com';
-		links[index] = link;
-
-		$.getJSON('http://api.sharedcount.com/?url=' + link,function (data) {
-			$( fb[index] ).append('<span class="share-count">' + data.Facebook.share_count + '</span>');
-			$( tw[index] ).append('<span class="share-count">' +  data.Twitter + '</span>');
-			$( gp[index] ).append('<span class="share-count">' +  data.GooglePlusOne + '</span>');
-			$( pt[index] ).append('<span class="share-count">' +  data.Pinterest + '</span>');
-			share_btn[index].text(data.StumbleUpon+data.Facebook.total_count+data.Delicious+ data.GooglePlusOne+data.Buzz+data.Twitter+data.Diggs+data.Pinterest+data.LinkedIn);
-		});
-
+	$(window).bind("load", function() {
+		Prepare_share_buttons();
 	});
-	
-	// get twitter share count
-	$.getJSON('http://cdn.api.twitter.com/1/urls/count.json?url=' + link + '&callback=?', function (twitdata) {
-		// $('#twitter-count').text( ReplaceNumberWithCommas(twitdata.count))
-		tw[index].append('<span class="share-count">' +  twitdata.count + '</span>');
-	});
-		
-	
-	// facebook share count for all pages
-	all_links = links.join(',');
-	$.getJSON('http://graph.facebook.com/?ids=' + all_links, function (fbdata) {
+	function Prepare_share_buttons(){
+		// share count
+		var share_btn = [];
 		$( '.qa-q-item-main' ).each(function( index ) {
+			// create share links
 			share_btn[index] = $(this).find(".share-item-list");
 			link = $(share_btn[index]).attr( "data-share-link" );
-			
-			fb[index] = $( this ).find(".btn-facebook");			
-			if( fbdata[link] == 'undefined' ){
-				$( fb[index] ).append('<span class="share-count">' + fbdata[link].shares + '</span>');
-			}else{
-				$( fb[index] ).append('<span class="share-count">0</span>');
-			}
+			title = $(share_btn[index]).attr( "data-share-title" );
+			if(!($(this).find(".share-container").length))
+				$(this).append(
+				'<div class="share-container" style="display:none;">'+
+				'<button class="close share-close" type="button"><span aria-hidden="true">×</span></button>'+
+				'<ul class="share-list-buttons">'+
+				'<li><a class="btn-share btn-facebook" href="https://www.facebook.com/sharer/sharer.php?u=' + link + '"><i class="fa  fa-facebook"></i><span class="share-site-title">FaceBook</span></a></li>'+
+				'<li><a class="btn-share btn-twitter" href="http://twitter.com/home?status=' + title + ' ' + link + '"><i class="fa fa-twitter"></i><span class="share-site-title">Twitter</span></a></li>'+
+				'<li><a class="btn-share btn-google-plus" href="https://plus.google.com/share?url=' + link + '"><i class="fa fa-google-plus"></i><span class="share-site-title">Google+</span></a></li>'+
+				'<li><a class="btn-share btn-pinterest" href="http://pinterest.com/pin/create/button/?url=' + link + '&description=' + title + '"><i class="fa fa-pinterest"></i><span class="share-site-title">Pinterest</span></a></li>'+
+				'</ul></div>'
+				);
 		});
-	});
+	}
 
-	*/
-	
-});
 
 // override qa_reveal to show error boxes
 qa_reveal = function(elem, type, callback){

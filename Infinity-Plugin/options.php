@@ -75,6 +75,7 @@ class it_options {
 				qa_opt('it_infinite_scroll_home_enable', (int)qa_post_text('it_infinite_scroll_home_enable') );
 				qa_opt('it_infinite_scroll_qa_enable', (int)qa_post_text('it_infinite_scroll_qa_enable') );
 				qa_opt('it_infinite_scroll_auto_enable', (int)qa_post_text('it_infinite_scroll_auto_enable') );
+				qa_opt('it_social_share_qa_enable', (int)qa_post_text('it_social_share_qa_enable') );
 				qa_opt('it_excerpt_field_enable', (int)qa_post_text('it_excerpt_field_enable') );
 				qa_opt('it_excerpt_access_level', (int)qa_post_text('it_excerpt_access_level') );
 				qa_opt('it_excerpt_field_length', (int)qa_post_text('it_excerpt_field_length') );
@@ -189,6 +190,7 @@ class it_options {
 	</div>
 	<div class="qa-part-form-tc-general">
 		<h3>General Settings</h3>
+		<h4>Logo</h4>
 		<table class="qa-form-tall-table options-table">
 			<tbody>
 				<tr>
@@ -214,6 +216,9 @@ class it_options {
 					</td>
 				</tr>
 			</tbody>
+		</table>
+		<h4>Infinite Scroll</h4>
+		<table class="qa-form-tall-table options-table">
 			<tbody>
 				<tr>
 					<th class="qa-form-tall-label">
@@ -256,6 +261,24 @@ class it_options {
 				</tr>
 			</tbody>
 		</table>
+		<h4>Social Sharing</h4>
+		<table class="qa-form-tall-table options-table">
+			<tbody>
+				<tr>
+					<th class="qa-form-tall-label">
+						Enable Social Sharing in question list
+						<span class="description">Social Sharing button will be added to question lists</span>
+					</th>
+					<td class="qa-form-tall-data">
+						<div class="on-off-checkbox-container">
+								<input type="checkbox" class="on-off-checkbox" value="1"' . (qa_opt('it_social_share_qa_enable') ? ' checked=""' : '') . ' id="it_social_share_qa_enable" name="it_social_share_qa_enable">
+							<label for="it_social_share_qa_enable">
+							</label>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>			
 		<h3>Ask & Edit question forms</h3>
 		<h4>Excerpt Field</h4>
 		<table class="qa-form-tall-table options-table">
