@@ -76,6 +76,7 @@ class it_options {
 				qa_opt('it_infinite_scroll_qa_enable', (int)qa_post_text('it_infinite_scroll_qa_enable') );
 				qa_opt('it_infinite_scroll_auto_enable', (int)qa_post_text('it_infinite_scroll_auto_enable') );
 				qa_opt('it_social_share_qa_enable', (int)qa_post_text('it_social_share_qa_enable') );
+				qa_opt('it_nav_type', qa_post_text('it_nav_type') );
 				qa_opt('it_excerpt_field_enable', (int)qa_post_text('it_excerpt_field_enable') );
 				qa_opt('it_excerpt_access_level', (int)qa_post_text('it_excerpt_access_level') );
 				qa_opt('it_excerpt_field_length', (int)qa_post_text('it_excerpt_field_length') );
@@ -275,6 +276,23 @@ class it_options {
 							<label for="it_social_share_qa_enable">
 							</label>
 						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>			
+		<h4>Main Navigation</h4>
+		<table class="qa-form-tall-table options-table">
+			<tbody>
+				<tr>
+					<th class="qa-form-tall-label">
+						Main Navigation
+						<span class="description">Navigation mode</span>
+					</th>
+					<td class="qa-form-tall-label">
+						<input class="theme-option-radio" type="radio"' . (qa_opt('it_nav_type') == 'minimal' ? ' checked=""' : '') . ' id="it_nav_type_minimal" name="it_nav_type" value="minimal">
+						   <label for="it_nav_type_minimal">Minimal</label>
+						<input class="theme-option-radio" type="radio"' . (qa_opt('it_nav_type') == 'standard' ? ' checked=""' : '') . ' id="it_nav_type_standard" name="it_nav_type" value="standard">
+						   <label for="it_nav_type_standard">Standard</label> 
 					</td>
 				</tr>
 			</tbody>

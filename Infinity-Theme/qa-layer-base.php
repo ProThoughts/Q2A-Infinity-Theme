@@ -73,7 +73,7 @@ class qa_html_theme extends qa_html_theme_base
 			else
 				$this->output('<style type="text/css">' . qa_opt('it_custom_css') . '</style>');
 				
-			if (($this->template=='submit') or (substr(qa_get_state(),0,4)=='edit')){
+			if (($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
 				$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl .'css/ask.css"/>');
 			}
 			if($this->request=='admin/it_options'){
@@ -124,7 +124,7 @@ class qa_html_theme extends qa_html_theme_base
 			$this->output('<script src="'.$this->rooturl.'js/bootstrap.min.js" type="text/javascript"></script>');
 			$this->output('<script src="'.$this->rooturl.'js/isotope.min.js" type="text/javascript"></script>');
 			$this->output('<script src="'.$this->rooturl.'js/main.js" type="text/javascript"></script>');
-			if (($this->template=='submit') or (substr(qa_get_state(),0,4)=='edit')){
+			if (($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
 				$this->output('<script src="'.$this->rooturl.'js/ask.js" type="text/javascript"></script>');
 				$this->output('<script src="'.$this->rooturl.'js/magicsuggest.min.js" type="text/javascript"></script>');
 				$this->output('<script src="'.$this->rooturl.'js/uploadfile.min.js" type="text/javascript"></script>');
@@ -230,8 +230,12 @@ class qa_html_theme extends qa_html_theme_base
 			
 			$this->output('<nav id="menu" class="navbar navbar-default main-navbar' . (qa_opt('it_nav_fixed')?' navbar-fixed-top':'') . '" role="navigation">');
 			
-			$this->show_nav('main','collapse navbar-collapse nav-main');
-
+			$nav_type = qa_opt('it_nav_type');
+			if($nav_type == 'standard')
+				$this->show_nav_standard('main','collapse navbar-collapse nav-main');
+			else
+				$this->show_nav('main','collapse navbar-collapse nav-main');
+			
 			$this->output('</nav>');
 			
 			$this->output('</header>');
@@ -283,8 +287,6 @@ class qa_html_theme extends qa_html_theme_base
 				$this->output('<button class="navbar-toggle collapsed" data-target=".nav-main" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>');
 				$this->output('</div>');
 				// Main Nav Items
-				$submit_nav = $navigation['ask'];
-				$submit_nav['url'] = str_replace("ask","submit",$submit_nav['url']);;
 				$questions_nav = $navigation['questions'];
 				$this->output('<div class="' . $class . '">');
 				$this->output('<ul class="qa-nav-main-list nav navbar-nav navbar-right ">');
@@ -315,7 +317,7 @@ class qa_html_theme extends qa_html_theme_base
 							</ul>
 					</li>
 					<li class="qa-nav-main-single-item qa-nav-main-single-submit qa-nav-main-single-ask">
-						<a class="qa-submit-item" href="' . $submit_nav['url'] .'">Submit</a>
+						<a class="qa-submit-item" href="' . $navigation['ask']['url'] .'">' . qa_lang_html('main/nav_ask') . '</a>
 					</li>
 				');
 				if (qa_is_logged_in()) {
@@ -424,6 +426,173 @@ class qa_html_theme extends qa_html_theme_base
 			}
 		}
 	/*
+	* show_nav_standard *** Replacement for Q2A theme function "nav()" & Theme function "show_nav"
+	* shows navigation menus
+	*
+	* @since 1.1.0
+	* @compatible no
+	*/	
+		function show_nav_standard($navtype, $class=null, $level=null)
+		{
+			$navigation=@$this->content['navigation'][$navtype];
+			if (($navtype=='main') && isset($navigation)){
+				//Responsive Navigation button
+				$this->output('<div class="navbar-header">');
+				$this->logo();
+				$this->output('<button class="navbar-toggle collapsed" data-target=".nav-main" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>');
+				$this->output('</div>');
+				
+				$this->output('<div class="' . $class . '">');
+				$this->output('<ul class="qa-nav-main-list nav navbar-nav navbar-right ">');
+
+				$page_order = '';
+				if( (($this->template=='qa') or ($this->template=='questions')) && ((qa_opt('it_layout_masonry_list')!='qlist') && qa_opt('it_layout_choose')) )
+					$page_order = '
+						<li class="divider"></li>
+						<li role="presentation" class="dropdown-header">List Layout</li>
+						<li class="dropdown-layout-container">
+							<a href="#" id="masonry-layout-btn" class="btn btn-default" title="Masonry"><i class="fa fa-th"></i></a>
+							<a href="#" id="list-layout-btn" class="btn btn-default" title="List"><i class="fa fa-th-list"></i></a>
+						</li>
+
+					';
+			
+			$this->set_context('nav_type', $navtype);
+			// reverse order of 'opposite' items since they float right
+			foreach (array_reverse($navigation, true) as $key => $navlink) {
+				if (@$navlink['opposite']) {
+					unset($navigation[$key]);
+					$navigation[$key] = $navlink;
+				}
+			}
+			$index = 0;
+			foreach ($navigation as $key => $navlink) {
+				$this->set_context('nav_key', $key);
+				$this->set_context('nav_index', $index++);
+				// $this->nav_item($key, $navlink, $class, $level);
+				$suffix = strtr($key, array( // map special character in navigation key
+					'$' => '',
+					'/' => '-',
+				));
+
+				$this->output('<li class="qa-nav-main-single-item qa-'.$class.'-item'.(@$navlink['opposite'] ? '-opp' : '').
+					(@$navlink['state'] ? (' qa-'.$class.'-'.$navlink['state']) : '').' qa-'.$class.'-'.$suffix.'">');
+				$this->nav_link($navlink, $class);
+
+				if (count(@$navlink['subnav']))
+					$this->nav_list($navlink['subnav'], $class, 1+$level);
+
+				$this->output('</li>');
+			}
+			$this->clear_context('nav_key');
+			$this->clear_context('nav_index');
+			$this->clear_context('nav_type');
+		
+
+			if (qa_is_logged_in()) {
+					$handle =  qa_get_logged_in_handle();
+					$user_nav = array();
+					$this->output('
+						<li class="qa-nav-main-single-item qa-nav-main-single-profile dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="' . qa_path_html('user/' .$handle) .'">' . $handle .'</a>
+							<ul class="user-nav dropdown-menu with-arrow">
+					');
+					// Theme Options
+					if (qa_get_logged_in_level() >= QA_USER_LEVEL_ADMIN) {
+						$user_nav['it_options'] = array(
+							'label' => 'Theme Options',
+							'url' => qa_path_html('admin/it_options'),
+						);
+						if ($this->request == 'admin/it_options'){
+							$user_nav['it_options']['selected'] = true;
+						}
+					}
+					
+					$logout = $this->content['navigation']['user']['logout'];
+					unset($this->content['navigation']['user']['logout']);
+					array_merge($user_nav , $this->content['navigation']['user']);
+					$user_nav['profile'] = array('label' => 'profile', 'url' => qa_path_html('user/' . $handle));
+					
+					if(!(QA_FINAL_EXTERNAL_USERS)) 
+						$user_nav['account'] = array('label' => 'account', 'url' => qa_path_html('account'));
+					$user_nav['favorites'] = array('label' => 'favorites', 'url' => qa_path_html('favorites'));
+					if(!(QA_FINAL_EXTERNAL_USERS))
+						$user_nav['wall'] = array('label' => 'wall', 'url' => qa_path_html('user/'.$handle.'/wall'), 'icon' =>'icon-edit');
+					$user_nav['recent_activity'] = array('label' => 'recent activity', 'url' => qa_path_html('user/'.$handle.'/activity'), 'icon' =>'icon-time');
+					$user_nav['all_questions'] = array('label' => 'all questions', 'url' => qa_path_html('user/'.$handle.'/questions'), 'icon' =>'icon-question');
+					$user_nav['all_answers'] = array('label' => 'all answers', 'url' => qa_path_html('user/'.$handle.'/answers'), 'icon' =>'icon-answer');
+					$user_nav['logout'] = $logout;
+					$navigation=@$user_nav;
+					foreach ($navigation as $a) {
+                        if (isset($a['url'])) {
+                            echo '<li' . (isset($a['selected']) ? ' class="active"' : '') . '><a href="' . @$a['url'] . '" title="' . @$a['label'] . '">' . @$a['label'] . '</a></li>';
+							if($a['label']=='Theme Options')
+								echo '<li class="divider"></li>';
+                        }
+                    }
+					$this->output($page_order);
+					$this->output('
+							</ul>
+						</li>
+					');
+				}else{
+					$login=@$this->content['navigation']['user']['login'];
+					$register=@$this->content['navigation']['user']['register'];
+					if (isset($login) && !QA_FINAL_EXTERNAL_USERS) {
+						$this->output('
+							<li class="qa-nav-main-single-item qa-nav-main-single-submit qa-nav-main-single-ask dropdown">
+								<a class="dropdown-toggle qa-submit-item" data-toggle="dropdown" href="' . $login['url'] .'">Login</a>
+								<ul class="user-nav dropdown-menu with-arrow">
+						');
+						$this->output(
+								'<form class="form-signin" id="qa-loginform" action="'.$login['url'].'" method="post">',
+								'<input class="form-control" type="text" id="qa-userid" name="emailhandle" placeholder="'.trim(qa_lang_html(qa_opt('allow_login_email_only') ? 'users/email_label' : 'users/email_handle_label'), ':').'" />',
+								'<input class="form-control" type="password" id="qa-password" name="password" placeholder="'.trim(qa_lang_html('users/password_label'), ':').'" />',
+								'<div id="qa-rememberbox"><input type="checkbox" name="remember" id="qa-rememberme" value="1"/>',
+								'<label for="qa-rememberme" id="qa-remember">'.qa_lang_html('users/remember').'</label></div>',
+								'<input type="hidden" name="code" value="'.qa_html(qa_get_form_security_code('login')).'"/>',
+								'<input type="submit" class="btn btn-primary btn-block" value="'.$login['label'].'" id="qa-login" name="dologin" />',
+								'<hr>',
+								'<p class="text-muted text-center"><small>Do not have an account?</small></p>
+								<a class="btn btn-default btn-block" href="' . $register['url'] . '">Sign Up</a>',
+							'</form>'
+						);
+						$this->output($page_order);
+						$this->output('
+								</ul>
+							</li>'
+						);
+					}
+				}
+				$this->output('</ul>');
+				//vardump(@$this->content['navigation']['user']);
+							
+				$this->search();
+				$this->output('</div>');
+				//unset($navigation);
+			}else
+			if (isset($navigation) || ($navtype=='user')) {
+				$this->output('<nav class="' . $class . '">');
+				
+				if ($navtype=='user')
+					$this->logged_in();
+					
+				// reverse order of 'opposite' items since they float right
+				foreach (array_reverse($navigation, true) as $key => $navlink)
+					if (@$navlink['opposite']) {
+						unset($navigation[$key]);
+						$navigation[$key]=$navlink;
+					}
+				
+				$this->set_context('nav_type', $navtype);
+				$this->nav_list($navigation, 'nav-'.$navtype, $level);
+				$this->nav_clear($navtype);
+				$this->clear_context('nav_type');
+	
+				$this->output('</nav>');
+			}
+		}
+	/*
 	* nav_item
 	* shows navigation menu items
 	* Add [ 'qa-nav-main-sub-' + class ] to navigation item's class
@@ -455,7 +624,7 @@ class qa_html_theme extends qa_html_theme_base
 	*/			
 		function page_title_error()
 		{
-			if( ($this->template=='question') or ($this->template=='submit') ){
+			if( ($this->template=='question') or ($this->template=='ask') ){
 				$this->output('<h1>');
 				$this->title();
 				$this->output('</h1>');
@@ -500,7 +669,7 @@ class qa_html_theme extends qa_html_theme_base
 					}
 				}
 			}
-			if( ($this->template=='admin') or ($this->template=='users')  or ($this->template=='user') )
+			if( ($this->template=='admin') or ($this->template=='users')  or ($this->template=='user') or (qa_opt('it_nav_type') == 'standard'))
 				$this->show_nav('sub','nav navbar-nav sub-navbar pull-right');
 			qa_html_theme_base::q_view_clear();
 		}

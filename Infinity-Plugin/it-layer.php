@@ -43,9 +43,9 @@ class qa_html_theme_layer extends qa_html_theme_base {
 
 		}
 		// ask form
-		if ( ($this->template=='submit') or (substr(qa_get_state(),0,4)=='edit')){
+		if ( ($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
 			// Form template
-			if ($this->template=='submit')
+			if ($this->template=='ask')
 				$form_name = 'form';
 			else
 				$form_name = 'form_q_edit';
@@ -56,7 +56,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				$featured_image_url = '';
 				$featured_image_style = '';
 				$featured_file_container_style = '';
-				if ($this->template!='submit'){
+				if ($this->template!='ask'){
 					$postid = $this->content["q_view"]["raw"]["postid"];
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
 					$featured_image = qa_db_postmeta_get($postid, 'et_featured_image');
@@ -91,20 +91,20 @@ class qa_html_theme_layer extends qa_html_theme_base {
 
 			// Excerpt Field
 			if(qa_opt('it_excerpt_field_enable')){
-				if ($this->template=='submit'){
-					$excerit_pos = (int)qa_opt('it_excerpt_pos_ask');
+				if ($this->template=='ask'){
+					$excerpt_pos = (int)qa_opt('it_excerpt_pos_ask');
 					$excerit_text = '';
 				}else{
 					$postid = $this->content["q_view"]["raw"]["postid"];
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
-					$excerit_pos = (int)qa_opt('it_excerpt_pos_edit');
+					$excerpt_pos = (int)qa_opt('it_excerpt_pos_edit');
 					$excerit_text = qa_db_postmeta_get($postid, 'et_excerpt_text');
 				}
 			}
 				
 			// Category Field
 			if(qa_opt('it_cat_advanced_enable')){
-				if ($this->template=='submit'){
+				if ($this->template=='ask'){
 					$category_pos = (int)qa_opt('it_cat_pos_ask');
 					//$field_value = qa_post_text('q_category');
 				}else{
@@ -127,7 +127,6 @@ class qa_html_theme_layer extends qa_html_theme_base {
 			// order of form elements
 			$count = count($this->content[$form_name]["fields"]);
 			$this->content[$form_name]["fields"] = array_merge(
-				$custom_field[0],
 				array_slice($this->content[$form_name]["fields"], 0, $category_pos),
 				$custom_field[1],
 				array_slice($this->content[$form_name]["fields"], $category_pos, $count)
@@ -143,12 +142,11 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				
 				$count = count($this->content[$form_name]["fields"]);
 				$this->content[$form_name]["fields"] = array_merge(
-					array_slice($this->content[$form_name]["fields"], 0, $excerit_pos),
+					array_slice($this->content[$form_name]["fields"], 0, $excerpt_pos),
 					$custom_field[0],
-					array_slice($this->content[$form_name]["fields"], $excerit_pos, $count)
+					array_slice($this->content[$form_name]["fields"], $excerpt_pos, $count)
 				);
 			}
-			//v($this->content[$form_name]["fields"]);
 		}
 	}
 }
