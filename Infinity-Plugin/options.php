@@ -187,6 +187,9 @@ class it_options {
 			<li role="presentation">
 				<a href="#" data-toggle=".qa-part-form-tc-typo">Typography</a>
 			</li>
+			<li role="presentation">
+				<a href="#" data-toggle=".qa-part-form-tc-about">About</a>
+			</li>
 		</ul>
 	</div>
 	<div class="qa-part-form-tc-general">
@@ -499,6 +502,10 @@ class it_options {
 						   <label for="it_layout_masonry_list">Masonry List</label> 
 						<input class="theme-option-radio" type="radio"' . (qa_opt('it_layout_lists') == 'qlist' ? ' checked=""' : '') . ' id="it_layout_qlist" name="it_layout_lists" value="qlist">
 						   <label for="it_layout_qlist">Default List</label> 
+						<div class="qa-header"></div>
+						<div role="alert" class="alert alert-danger">
+							Only "Masonry Grid" & "Masonry List" options support showing thumbnail of featured images in question lists.
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -935,6 +942,39 @@ class it_options {
 			<tbody>
 			</tbody>
 		</table>
+	</div>
+	<div class="qa-part-form-tc-about">
+			<div style="text-align:center;">
+				<span><a href="http://QA-Themes.com/" title="Question2Answer Themes"><img src="http://qa-themes.com/q2a-theme-logo.png"></a></span>
+			</div>
+
+			<h1>Infinity Theme</h1>
+				<p>Infinity Theme is a Free & Open Source Question2Answer Theme published under MIT License. It means that you are free to use and change the theme and it\'s source file as you wish, only you have to keep Attribution link to it\'s developers website in Footer or in about page.</p>
+			<h1>Support & Issues</h1>
+				<p>This theme is supported in developer\'s <a href="http://qa-themes.com/forums/forum/theme-support">support forum</a>. it\'s free and registration is open for everyone.</p>
+				<p>To submit issues about this theme use project\'s page at <a href="https://github.com/Towhidn/Q2A-Infinity-Theme/issues/new">github</a> or submit the issue <a href="http://qa-themes.com/contact-us">here</a>.</p>
+
+			<h1>About Developer</h1>
+				<p>Infinity Theme is designed and developed by <a href="http://towhidn.com">Towhid</a>. a freelance web developer and designer and published in <a href="http://qa-themes.com/">QA-Themes.com</a>.</p>
+				<p>if want to hire a professional web development feel free to <a href="http://qa-themes.com/contact-us">contact us</a>.<br>
+				Also if you are working on an StartUp or you have an interesting idea in your mind, I\'ll be glad to hear about it and exchange ideas.<br></p>
+				<p>Checkout our free & open source <a href="http://qa-themes.com/themes">Q2A Themes</a> and <a href="http://qa-themes.com/plugins">Plugins</a>.</p>
+
+			<hr>
+			<h1>Resources Used in theme</h1>
+				<p>List of resources(Plugins, Libraries, codes, ...) used in Infinity Theme:
+				<ul>
+					<li><a href="http://getbootstrap.com">Bootstrap</a></li>
+					<li><a href="https://github.com/nicolasbize/magicsuggest">MaigicSuggest</a></li>
+					<li><a href="https://github.com/bgrins/spectrum">Spectrum Colorpicker</a></li>
+					<li><a href="http://fontawesome.io/">FontAwesome</a></li>
+					<li><a href="https://github.com/harvesthq/chosen/">chosen</a></li>
+					<li><a href="https://github.com/metafizzy/isotope">isotope</a></li>
+					<li><a href="http://hayageek.com/">jQuery Upload File</a></li>
+				</ul>
+				send your ideas and suggestions to our <a href="http://idea.qa-themes.com/" title="Question2Answer Idea & Suggestions">IdeaBox</a>.</p>
+			</div>
+
 	</div>
 	<div class="form-button-sticky-footer">
 		<div class="form-button-holder">
