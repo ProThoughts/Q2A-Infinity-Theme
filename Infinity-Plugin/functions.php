@@ -10,6 +10,11 @@ if (!(function_exists('v'))) {
 function it_reset_theme_options(){
     // General
     qa_opt('it_favicon_url', '');
+	qa_opt('it_infinite_scroll_home_enable', true );
+	qa_opt('it_infinite_scroll_qa_enable', false );
+	qa_opt('it_infinite_scroll_auto_enable', true );
+	qa_opt('it_social_share_qa_enable', true );
+	qa_opt('it_nav_type', 'minimal' );
 	qa_opt('it_excerpt_field_enable', false );
 	qa_opt('it_excerpt_access_level', 120 ); // super admin
 	qa_opt('it_excerpt_field_length', 256 );
