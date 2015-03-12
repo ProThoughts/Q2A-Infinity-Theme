@@ -23,7 +23,7 @@ $(document).ready(function(){
 	else if(layout == 'masonry')
 		qlist.isotope({
 			itemSelector: '.qa-q-list-item',
-			layoutMode: 'fitRows',
+			layoutMode: 'masonry',
 			resizable: false,
 			// layout mode options
 		});
