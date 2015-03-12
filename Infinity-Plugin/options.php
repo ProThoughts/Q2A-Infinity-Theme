@@ -69,7 +69,8 @@ class it_options {
 		if ( (qa_clicked('it_save_button')) && ($this->added==false) ){
                 // General
                 qa_opt('logo_url', qa_post_text('it_logo_field'));
-				if(!empty(qa_post_text('it_logo_field')))
+				$logo = qa_post_text('it_logo_field');
+				if(!empty($logo))
 					qa_opt('logo_show', true);
                 qa_opt('it_favicon_url', qa_post_text('it_favicon_field'));
 				qa_opt('it_infinite_scroll_home_enable', (int)qa_post_text('it_infinite_scroll_home_enable') );
