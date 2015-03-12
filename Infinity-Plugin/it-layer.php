@@ -78,7 +78,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				$custom_field[0]['category_featured_upload']['type'] = 'custom';
 
 				$count = count($this->content[$form_name]["fields"]);
-				$featured_pos = 1;
+				$featured_pos = 0;
 				$this->content[$form_name]["fields"] = array_merge(
 					array_slice($this->content[$form_name]["fields"], 0, $featured_pos),
 					$custom_field[0],
