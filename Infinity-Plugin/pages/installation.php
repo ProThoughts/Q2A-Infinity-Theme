@@ -23,6 +23,8 @@ if (empty($version)){
 	//reset_theme_options();
 	$version = 1;
 	qa_opt('IT_VERSION',$version);
+	require_once(IT_DIR. '/functions.php');
+	it_reset_theme_options();
 	echo '<p>Theme is installed.</p>';
 }
 /*
