@@ -75,7 +75,7 @@ $(document).ready(function(){
 	if(it_ajax_infinite_autoload == 1){
 	$(window).scroll(function() {
 	   if($(window).scrollTop() + $(window).height() > $(document).height() - 300) {
-			if( $('infinite-ajax-suggest').length ) // check if infinity is enabled in this page
+			if( $('#infinite-ajax-suggest').length ) // check if infinity is enabled in this page
 				InfinitScroll();
 	   }
 	});
