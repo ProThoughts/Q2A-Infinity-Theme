@@ -308,9 +308,9 @@ class qa_html_theme extends qa_html_theme_base
 						<a class="qa-submit-item dropdown-toggle" data-toggle="dropdown" href="' . $questions_nav['url'] .'">Browse</span></a>
 
 							<ul class="dropdown-menu with-arrow sub-nav-brows" role="menu">
-								<li><a href="' . qa_path_html('questions') . '">' . qa_lang('main/nav_most_votes') . '</a></li>
+								<li><a href="' . qa_path_html('questions') . '">' . qa_lang('main/nav_qs') . '</a></li>
 								<li><a href="' . qa_path_html('questions', array('sort' => 'hot')) . '">' . qa_lang_html('main/nav_hot') . '</a></li>
-								<li><a href="' . qa_path_html('questions', array('sort' => 'votes')) . '">Most Voted</a></li>
+								<li><a href="' . qa_path_html('questions', array('sort' => 'votes')) . '">' . qa_lang('main/nav_most_votes') . '</a></li>
 								<li class="divider"></li>
 								<li><a href="' . qa_path_html('activity') . '">'  . qa_lang_html('main/nav_activity') . '</a></li>
 								' . $page_order . '
