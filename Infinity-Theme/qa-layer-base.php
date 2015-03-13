@@ -73,7 +73,7 @@ class qa_html_theme extends qa_html_theme_base
 			else
 				$this->output('<style type="text/css">' . qa_opt('it_custom_css') . '</style>');
 				
-			if (($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
+			if (($this->template=='ask') or ($this->template=='question' && substr(qa_get_state(),0,4)=='edit')){
 				$this->output('<link rel="stylesheet" type="text/css" href="' .$this->rooturl .'css/ask.css"/>');
 			}
 			if($this->request=='admin/it_options'){
@@ -124,7 +124,7 @@ class qa_html_theme extends qa_html_theme_base
 			$this->output('<script src="'.$this->rooturl.'js/bootstrap.min.js" type="text/javascript"></script>');
 			$this->output('<script src="'.$this->rooturl.'js/isotope.min.js" type="text/javascript"></script>');
 			$this->output('<script src="'.$this->rooturl.'js/main.js" type="text/javascript"></script>');
-			if (($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
+			if (($this->template=='ask') or ($this->template=='question' && substr(qa_get_state(),0,4)=='edit')){
 				$this->output('<script src="'.$this->rooturl.'js/ask.js" type="text/javascript"></script>');
 				$this->output('<script src="'.$this->rooturl.'js/magicsuggest.min.js" type="text/javascript"></script>');
 				$this->output('<script src="'.$this->rooturl.'js/uploadfile.min.js" type="text/javascript"></script>');

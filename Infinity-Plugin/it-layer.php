@@ -43,7 +43,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 
 		}
 		// ask form
-		if ( ($this->template=='ask') or (substr(qa_get_state(),0,4)=='edit')){
+		if ( ($this->template=='ask') or ($this->template=='question' && substr(qa_get_state(),0,4)=='edit')){
 			// Form template
 			if ($this->template=='ask')
 				$form_name = 'form';
