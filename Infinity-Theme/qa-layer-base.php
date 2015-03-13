@@ -630,8 +630,7 @@ class qa_html_theme extends qa_html_theme_base
 				$this->output('</h1>');
 				if (isset($this->content['error']))
 					$this->error(@$this->content['error']);
-			}else{
-				if( ($this->template=='tag') or ($this->template=='questions') ){
+			}elseif( ($this->template=='tag') or ($this->template=='questions') ){
 					// fill array with breadcrumb fields and show them
 					$bc = array(); // breadcrumb
 					$bc[0]['title']=qa_opt('site_title');
@@ -667,7 +666,8 @@ class qa_html_theme extends qa_html_theme_base
 							$this->output(' <a href="' . $item['url'] . '" title="' . $item['title'] . '" class="btn btn-default">' . $item['content'] . '</a>');
 						$this->output('</div>');
 					}
-				}
+			}else{
+				qa_html_theme_base::page_title_error();
 			}
 			if( ($this->template=='admin') or ($this->template=='users')  or ($this->template=='user') or (qa_opt('it_nav_type') == 'standard'))
 				$this->show_nav('sub','nav navbar-nav sub-navbar pull-right');
