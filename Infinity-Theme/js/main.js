@@ -35,18 +35,17 @@ $(document).ready(function(){
 			scroll_loading = true;
 			$.ajax({
 				url: it_ajax_infinite_page_url,
-				data: { page: it_ajax_infinite_page_number, location: "Boston" },
+				data: { page: it_ajax_infinite_page_number },
 				type: "POST"
 			}).done(function(data) {
 				$('#ajax-holder').html( data );
-				if($('#ajax-holder > .qa-q-list > div').length < it_ajax_infinite_page_items_count){
+				if($('#ajax-holder > .qa-q-list > div').length < 1){
 					$('#infinite-ajax-load-more').html('There is nothing more here!');
 				}else{
 					$('#ajax-holder > .qa-q-list > div').each(function( index ) {
 						id = $(this).attr('id');
 						if(!( $('.qa-part-q-list > form > .qa-q-list #' + id ).length )){
-								
-								var elem = $('#ajax-holder > .qa-q-list  #'+id);
+								var elem = $('#ajax-holder > .qa-q-list #'+id);
 								qlist.append( elem );
 								if(layout != 'qlist')
 									qlist.isotope( 'appended', elem ).fadeIn();
@@ -76,7 +75,8 @@ $(document).ready(function(){
 	if(it_ajax_infinite_autoload == 1){
 	$(window).scroll(function() {
 	   if($(window).scrollTop() + $(window).height() > $(document).height() - 300) {
-		   InfinitScroll();
+			if( $('infinite-ajax-suggest').length ) // check if infinity is enabled in this page
+				InfinitScroll();
 	   }
 	});
 	}
