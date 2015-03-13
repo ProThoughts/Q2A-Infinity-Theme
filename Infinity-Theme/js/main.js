@@ -219,14 +219,6 @@ $(document).ready(function(){
 		});
 	}
 
-
-// override qa_reveal to show error boxes
-qa_reveal = function(elem, type, callback){
-	if(!($(elem).find(".close").length) && elem.className=='qa-error')
-		elem.innerHTML = elem.innerHTML + '<button class="close" data-dismiss="alert" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
-  	if (elem)
-		$(elem).fadeIn(400,'swing', callback);
-};
 // override qa_favorite_click for favorite list buttons
 qa_favorite_click = function(elem){
 	var ens=elem.name.split('_');
