@@ -42,13 +42,14 @@ class qa_html_theme_layer extends qa_html_theme_base {
 			}
 
 		}
-		// ask form
-		if ( ($this->template=='ask') or ($this->template=='question' && substr(qa_get_state(),0,4)=='edit')){
-			// Form template
-			if ($this->template=='ask')
-				$form_name = 'form';
-			else
-				$form_name = 'form_q_edit';
+
+		$askTemplate = $this->template === 'ask';
+		if ($askTemplate)
+			$form_name = 'form';
+		else {
+			$form_name = isset($this->content['form_q_edit']) ? 'form_q_edit' : null;
+		}
+		if ($askTemplate or ($this->template == 'question' && substr(qa_get_state(), 0, 4) == 'edit') && isset($form_name)) {
 
 			// Featured Image
 			if(qa_opt('it_feature_img_enable')){
@@ -56,7 +57,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				$featured_image_url = '';
 				$featured_image_style = '';
 				$featured_file_container_style = '';
-				if ($this->template!='ask'){
+				if ($askTemplate){
 					$postid = $this->content["q_view"]["raw"]["postid"];
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
 					$featured_image = qa_db_postmeta_get($postid, 'et_featured_image');
@@ -91,7 +92,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 
 			// Excerpt Field
 			if(qa_opt('it_excerpt_field_enable')){
-				if ($this->template=='ask'){
+				if ($askTemplate){
 					$excerpt_pos = (int)qa_opt('it_excerpt_pos_ask');
 					$excerit_text = '';
 				}else{
@@ -104,7 +105,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				
 			// Category Field
 			if(qa_opt('it_cat_advanced_enable')){
-				if ($this->template=='ask'){
+				if ($askTemplate){
 					$category_pos = (int)qa_opt('it_cat_pos_ask');
 					//$field_value = qa_post_text('q_category');
 				}else{
