@@ -49,7 +49,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 		else {
 			$form_name = isset($this->content['form_q_edit']) ? 'form_q_edit' : null;
 		}
-		if ($askTemplate or ($this->template == 'question' && substr(qa_get_state(), 0, 4) == 'edit') && isset($form_name)) {
+		if ($askTemplate || (($this->template == 'question' && substr(qa_get_state(), 0, 4) == 'edit') && isset($form_name))) {
 
 			// Featured Image
 			if(qa_opt('it_feature_img_enable')){
@@ -57,7 +57,7 @@ class qa_html_theme_layer extends qa_html_theme_base {
 				$featured_image_url = '';
 				$featured_image_style = '';
 				$featured_file_container_style = '';
-				if ($askTemplate){
+				if (!$askTemplate){
 					$postid = $this->content["q_view"]["raw"]["postid"];
 					require_once QA_INCLUDE_DIR.'qa-db-metas.php';
 					$featured_image = qa_db_postmeta_get($postid, 'et_featured_image');
