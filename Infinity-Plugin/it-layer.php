@@ -49,7 +49,12 @@ class qa_html_theme_layer extends qa_html_theme_base {
 		else {
 			$form_name = isset($this->content['form_q_edit']) ? 'form_q_edit' : null;
 		}
-		if ($askTemplate || (($this->template == 'question' && substr(qa_get_state(), 0, 4) == 'edit') && isset($form_name))) {
+
+		if (!isset($this->content[$form_name])) {
+			return;
+		}
+
+		if ($askTemplate || ($this->template == 'question' && substr(qa_get_state(), 0, 4) == 'edit')) {
 
 			// Featured Image
 			if(qa_opt('it_feature_img_enable')){
